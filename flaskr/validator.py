@@ -14,5 +14,8 @@ class FormRegister(FlaskForm):
         email_selected = User.query.filter_by(username=email_to_check).first()
         if email_selected:
             raise ValidationError('Email already taken, get another email!')
+        
+# class FormLogin(FlaskForm):
+    
     
     

@@ -6,18 +6,18 @@ from flaskr.__init__ import app
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash    
 
-@app.route('/user', methods=["POST"])
+@app.route('/users', methods=["POST"])
 def add_user():
     data = request.get_json()
-    hash_password = generate_password_hash(data['password'], method="sha256")
-    new_user = User(name=data['name'], email=data['email'], password=hash_password)
+    
+    new_user = User(name=data['name'], email=data['email'], encode_password=data['password'])
     
     db.session.add(new_user)
     db.session.commit()
     
     return jsonify({"msg" : "User created successfully"})
     
-@app.route('/user', methods=["GET"])
+@app.route('/users', methods=["GET"])
 def get_all_user():
     query = User.query.all()
     all_user = []
@@ -32,7 +32,7 @@ def get_all_user():
     
     return jsonify({"users" : all_user})
 
-@app.route('/user/<int:id>', methods=["GET"])
+@app.route('/users/<int:id>', methods=["GET"])
 def get_one_user(id):
     user = User.query.filter_by(id=id).first()
     
@@ -47,7 +47,7 @@ def get_one_user(id):
     
     return jsonify({"user" : user_data})
 
-@app.route('/user/<int:id>', methods=['PUT'])
+@app.route('/users/<int:id>', methods=['PUT'])
 def update_one_user(id):
     pass
     # user = User.query.filter_by(id=id)
