@@ -4,7 +4,7 @@ from flaskr.__init__ import bcrypt
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(length=50), unique=True, nullable=False)
+    name = db.Column(db.String(length=50), unique=False, nullable=False)
     email = db.Column(db.String(length=50), unique=True, nullable=False)
     password = db.Column(db.String(length=20), nullable=False)
     
