@@ -1,4 +1,4 @@
-from flaskr.model import db, User
+from flaskr.model import Users, db
 from flaskr.__init__ import app
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
@@ -6,11 +6,11 @@ from flask_bcrypt import check_password_hash
 @app.route('/users', methods=["POST"])
 def add_user():
     data = request.get_json()
-    selected_email = User.query.filter_by(email=data["email"]).first()
+    selected_email = Users.query.filter_by(email=data["email"]).first()
     if selected_email:
         return jsonify({"msg" : "User already taken, try with another email!"}), 400
     
-    new_user = User(name=data['name'], email=data['email'], encode_password=data['password'])
+    new_user = Users(name=data['name'], email=data['email'], encode_password=data['password'])
     
     db.session.add(new_user)
     db.session.commit()
@@ -19,7 +19,7 @@ def add_user():
     
 @app.route('/users', methods=["GET"])
 def get_all_user():
-    query = User.query.all()
+    query = Users.query.all()
     all_user = []
     
     for user in query:
@@ -32,9 +32,9 @@ def get_all_user():
     
     return jsonify({"users" : all_user})
 
-@app.route('/users/<int:id>', methods=["GET"])
-def get_one_user(id):
-    user = User.query.filter_by(id=id).first()
+@app.route('/Userss/<int:id>', methods=["GET"])
+def get_one_Users(id):
+    user = Users.query.filter_by(id=id).first()
     
     if not user:
         return jsonify({"msg" : "User not found"}), 401
@@ -49,7 +49,7 @@ def get_one_user(id):
 
 @app.route('/users/<int:id>', methods=['PUT'])
 def update_one_user(id):
-    user = User.query.filter_by(id=id).first()
+    user = Users.query.filter_by(id=id).first()
     if not user:
         return jsonify({"msg" : "User not found"}), 401
     
@@ -64,7 +64,7 @@ def update_one_user(id):
 
 @app.route('/user/<int:id>', methods=['DELETE'])
 def delete_one_user(id):
-    user = User.query.filter_by(id=id).first()
+    user = Users.query.filter_by(id=id).first()
 
     if not user:
         return jsonify({"msg" : "User not found"}), 401
@@ -78,7 +78,7 @@ def delete_one_user(id):
 @app.route('/login', methods=["POST"])
 def user_login():
     data = request.get_json()
-    selected_user = User.query.filter_by(email=data["email"]).first()
+    selected_user = Users.query.filter_by(email=data["email"]).first()
     if selected_user:
         if not check_password_hash(selected_user.password, data["password"]):
             return jsonify({"msg" : "Invalid password"}), 404
@@ -86,4 +86,6 @@ def user_login():
 
     return jsonify({"msg" : "Invalid email"}), 404
 
-
+@app.route('/login/pin', methods=["POST"])
+def check_pin():
+    pass

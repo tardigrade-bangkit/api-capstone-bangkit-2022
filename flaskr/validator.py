@@ -2,11 +2,11 @@ from xml.dom import ValidationErr
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, PasswordField
 from wtforms.validators import ValidationError, DataRequired, Length, EqualTo, Email
-from flaskr.model import User
+from flaskr.model import Users
 
 class FormRegister(FlaskForm):
     def validate_email(self, email_to_check):
-        email_selected = User.query.filter_by(email=email_to_check).first()
+        email_selected = Users.query.filter_by(email=email_to_check).first()
         if email_selected:
             raise ValidationError('Email already taken, get another email!')
         
