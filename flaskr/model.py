@@ -1,6 +1,6 @@
-from flaskr.__init__ import db
-from flask_sqlalchemy import SQLAlchemy
 from flaskr.__init__ import bcrypt
+from flask_sqlalchemy import SQLAlchemy
+from flaskr.__init__ import db
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -15,4 +15,6 @@ class User(db.Model):
     @encode_password.setter
     def encode_password(self, password_to_hash):
         self.password = bcrypt.generate_password_hash(password_to_hash).decode("utf-8")
-    
+        
+    # def check_password(self, password_to_check):
+        
