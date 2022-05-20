@@ -148,13 +148,17 @@ class Materials(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     lessons_content = db.relationship('Lessons_Content', backref="materials", uselist=False) # one to one
+    material_content = db.relationship('Material_Content_Class', backref='materials', lazy=True)
     
-# class Material_Content(db.Model):
-#     order = db.Column(db.Integer, nullable=False)
-#     text = db.Column(db.String(length=255), nullable=False)
-#     image = db.Column(db.String(length=255), nullable=False)
-#     audio = db.Column(db.String(length=255), nullable=False)
-#     Materials_id = db.Column(db.Integer, db.ForeignKey('materials.id'))
+class Material_Content_Class(db.Model):
+    __tablename__ = 'Material_Content'
+    __table_args__ = {'extend_existing': True}
+    order = db.Column(db.Integer, nullable=False)
+    text = db.Column(db.String(length=255), nullable=False)
+    image = db.Column(db.String(length=255), nullable=False)
+    audio = db.Column(db.String(length=255), nullable=False)
+    Materials_id = db.Column(db.Integer, db.ForeignKey('materials.id'), primary_key=True)
+
 class Multiple_choices(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
@@ -163,14 +167,17 @@ class Multiple_choices(db.Model):
     q_image = db.Column(db.String(length=255), nullable=False)
     answer = db.Column(db.String(length=1), nullable=False)
     lessons_content = db.relationship('Lessons_Content', backref="multiple_choices", uselist=False) # one to one
+    multiple_choices_answer = db.relationship('Multiple_Choices_Answers_Class', backref="multiple_choices", lazy=True)
 
 
-# class Multiple_Choices_Answers(db.Model):
-#     choice = db.Column(db.String(length=1), nullable=False)
-#     text = db.Column(db.Integer, nullable=True)
-#     audio = db.Column(db.Integer, nullable=True)
-#     image = db.Column(db.Integer, nullable=True)
-#     Multiple_Choices_id = db.Column(db.Integer, db.ForeignKey('multiple_choices.id'))
+class Multiple_Choices_Answers_Class(db.Model):
+    __tablename__ = 'Multiple_Choices_Answers'
+    __table_args__ = {'extend_existing': True}
+    choice = db.Column(db.String(length=1), nullable=False)
+    text = db.Column(db.Integer, nullable=True)
+    audio = db.Column(db.Integer, nullable=True)
+    image = db.Column(db.Integer, nullable=True)
+    Multiple_Choices_id = db.Column(db.Integer, db.ForeignKey('multiple_choices.id'), primary_key=True)
     
 class Arrange_sentences(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -180,12 +187,15 @@ class Arrange_sentences(db.Model):
     q_image = db.Column(db.String(length=255), nullable=True)
     answer = db.Column(db.String(length=255), nullable=False)
     lessons_content = db.relationship('Lessons_Content', backref="arrange_sentences", uselist=False) # one to one
+    arrange_sentences_answer_choices = db.relationship('Arrange_Sentences_Answer_Choices_Class', backref="arrange_sentences", lazy=True)
 
     
-# class Arrange_Sentences_Answer_Choices(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     word = db.Column(db.String(length=255), nullable=False)
-#     Arrange_Sentences_id = db.Column(db.Integer, db.ForeignKey('arrange_sentences.id'))
+class Arrange_Sentences_Answer_Choices_Class(db.Model):
+    __tablename__ = 'Arrange_Sentences_Answer_Choices'
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    word = db.Column(db.String(length=255), nullable=False)
+    Arrange_Sentences_id = db.Column(db.Integer, db.ForeignKey('arrange_sentences.id'))
 
     
 class Short_answers(db.Model):

@@ -1,6 +1,10 @@
-from flaskr.model import Achievements, Lessons_Content, Materials, Multiple_choices, db,Users,Avatars,Children,Badges,Children_Badges_Association,Lessons,Short_answers, Arrange_sentences
+from flaskr.model import db,Achievements,Lessons_Content,Users,Avatars,Children,Badges,Lessons
+from flaskr.model import Multiple_choices,Short_answers,Arrange_sentences,Materials
+from flaskr.model import Children_Achievements_Association, Children_Badges_Association, Progress_Association
+from flaskr.model import Material_Content_Class, Multiple_Choices_Answers_Class, Arrange_Sentences_Answer_Choices_Class
 db.drop_all()
 db.create_all()
+# Multiple_choices_answers, Arrange_sentences_answer_choices
 
 avatar1 = Avatars(image_url="https://user1wioeurouweruowe.com") 
 avatar2 = Avatars(image_url="https://user2wioeurouweruowe.com") 
@@ -96,5 +100,27 @@ lessons_content4 = Lessons_Content(order=4, type="Grammar", title="Content belaj
 lessons_content5 = Lessons_Content(order=5, type="Grammar", title="Content belajar kelima", lessons=lessons5, materials=materials2, multiple_choices=multiple_choices5, arrange_sentences=arrange_sentences5, short_answers=short_answer5)
 
 db.session.add_all([lessons_content1, lessons_content2, lessons_content3, lessons_content4, lessons_content5])
+
+material_content1 = Material_Content_Class(order=1, text="ini adalah material content 1", image="https://image1.com", audio="https://audio1.com", materials=materials1)
+material_content2 = Material_Content_Class(order=2, text="ini adalah material content 2", image="https://image2.com", audio="https://audio2.com", materials=materials2)
+material_content3 = Material_Content_Class(order=3, text="ini adalah material content 3", image="https://image3.com", audio="https://audio3.com", materials=materials3)
+
+db.session.add_all([material_content1, material_content2, material_content3])
+
+multiple_choices_answer1 = Multiple_Choices_Answers_Class(choice="A", text="ini adalah multiple choices answer 1", image="https://image1.com", audio="https://audio1.com", multiple_choices=multiple_choices1)
+multiple_choices_answer2 = Multiple_Choices_Answers_Class(choice="A", text="ini adalah multiple choices answer 2", image="https://image2.com", audio="https://audio2.com", multiple_choices=multiple_choices2)
+multiple_choices_answer3 = Multiple_Choices_Answers_Class(choice="A", text="ini adalah multiple choices answer 3", image="https://image3.com", audio="https://audio3.com", multiple_choices=multiple_choices3)
+multiple_choices_answer4 = Multiple_Choices_Answers_Class(choice="A", text="ini adalah multiple choices answer 4", image="https://image4.com", audio="https://audio4.com", multiple_choices=multiple_choices4)
+multiple_choices_answer5 = Multiple_Choices_Answers_Class(choice="A", text="ini adalah multiple choices answer 5", image="https://image5.com", audio="https://audio5.com", multiple_choices=multiple_choices5)
+
+db.session.add_all([multiple_choices_answer1, multiple_choices_answer2, multiple_choices_answer3, multiple_choices_answer4, multiple_choices_answer5])
+
+arrange_sentences_answer_choices1 = Arrange_Sentences_Answer_Choices_Class(word="jawaban short answer 1", arrange_sentences=arrange_sentences1)
+arrange_sentences_answer_choices2 = Arrange_Sentences_Answer_Choices_Class(word="jawaban short answer 2", arrange_sentences=arrange_sentences2)
+arrange_sentences_answer_choices3 = Arrange_Sentences_Answer_Choices_Class(word="jawaban short answer 3", arrange_sentences=arrange_sentences3)
+arrange_sentences_answer_choices4 = Arrange_Sentences_Answer_Choices_Class(word="jawaban short answer 4", arrange_sentences=arrange_sentences4)
+arrange_sentences_answer_choices5 = Arrange_Sentences_Answer_Choices_Class(word="jawaban short answer 5", arrange_sentences=arrange_sentences5)
+
+db.session.add_all([arrange_sentences_answer_choices1,arrange_sentences_answer_choices2,arrange_sentences_answer_choices3,arrange_sentences_answer_choices4,arrange_sentences_answer_choices5])
 
 db.session.commit()
