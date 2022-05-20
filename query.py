@@ -1,4 +1,4 @@
-from flaskr.model import Achievements, db,Users,Avatars,Children,Badges,Children_Badges_Association,Lessons
+from flaskr.model import Achievements, Lessons_Content, Materials, Multiple_choices, db,Users,Avatars,Children,Badges,Children_Badges_Association,Lessons,Short_answers, Arrange_sentences
 db.drop_all()
 db.create_all()
 
@@ -57,5 +57,44 @@ lessons5 = Lessons(cover_image="https://cover_image5", level=5, title="Pelajaran
 lessons6 = Lessons(cover_image="https://cover_image6", level=6, title="Pelajaran 6", type="Speaking", badges=badges6, achievements=achievements3)
 
 db.session.add_all([lessons1, lessons2, lessons3, lessons4, lessons5, lessons6])
+
+
+materials1 = Materials()
+materials2 = Materials()
+materials3 = Materials()
+
+db.session.add_all([materials1, materials2, materials3])
+
+multiple_choices1 = Multiple_choices(q_text="What is Yol?", q_image="https://images1.com", q_audio="https://audio1.com", answer="A")
+multiple_choices2 = Multiple_choices(q_text="What is Han?", q_image="https://images2.com", q_audio="https://audio2.com", answer="B")
+multiple_choices3 = Multiple_choices(q_text="What is Uf?", q_image="https://images3.com", q_audio="https://audio3.com", answer="C")
+multiple_choices4 = Multiple_choices(q_text="What is Dan?", q_image="https://images4.com", q_audio="https://audio4.com", answer="D")
+multiple_choices5 = Multiple_choices(q_text="What is Tam?", q_image="https://images5.com", q_audio="https://audio5.com", answer="A")
+
+db.session.add_all([multiple_choices1, multiple_choices2, multiple_choices3, multiple_choices4, multiple_choices5])
+
+arrange_sentences1 = Arrange_sentences(q_text="What is Yol?", q_image="https://images1.com", q_audio="https://audio1.com", answer="A")
+arrange_sentences2 = Arrange_sentences(q_text="What is Han?", q_image="https://images2.com", q_audio="https://audio2.com", answer="B")
+arrange_sentences3 = Arrange_sentences(q_text="What is Uf?", q_image="https://images3.com", q_audio="https://audio3.com", answer="C")
+arrange_sentences4 = Arrange_sentences(q_text="What is Dan?", q_image="https://images4.com", q_audio="https://audio4.com", answer="D")
+arrange_sentences5 = Arrange_sentences(q_text="What is Tam?", q_image="https://images5.com", q_audio="https://audio5.com", answer="A")
+
+db.session.add_all([arrange_sentences1, arrange_sentences2, arrange_sentences3, arrange_sentences4, arrange_sentences5])
+
+short_answer1 = Short_answers(is_camera=False, q_text="What is Yol?", q_image="https://images1.com", q_audio="https://audio1.com", answer="A")
+short_answer2 = Short_answers(is_camera=True, q_text="What is Han?", q_image="https://images2.com", q_audio="https://audio2.com", answer="B")
+short_answer3 = Short_answers(is_camera=False, q_text="What is Uf?", q_image="https://images3.com", q_audio="https://audio3.com", answer="C")
+short_answer4 = Short_answers(is_camera=False, q_text="What is Dan?", q_image="https://images4.com", q_audio="https://audio4.com", answer="D")
+short_answer5 = Short_answers(is_camera=True, q_text="What is Tam?", q_image="https://images5.com", q_audio="https://audio5.com", answer="A")
+
+db.session.add_all([short_answer1, short_answer2, short_answer3, short_answer4, short_answer5])
+
+lessons_content1 = Lessons_Content(order=1, type="Grammar", title="Content belajar pertama", lessons=lessons1, materials=materials1, multiple_choices=multiple_choices1, arrange_sentences=arrange_sentences1, short_answers=short_answer1)
+lessons_content2 = Lessons_Content(order=2, type="Grammar", title="Content belajar kedua", lessons=lessons2, materials=materials2, multiple_choices=multiple_choices2, arrange_sentences=arrange_sentences2, short_answers=short_answer2)
+lessons_content3 = Lessons_Content(order=3, type="Grammar", title="Content belajar ketiga", lessons=lessons3, materials=materials3, multiple_choices=multiple_choices3, arrange_sentences=arrange_sentences3, short_answers=short_answer3)
+lessons_content4 = Lessons_Content(order=4, type="Grammar", title="Content belajar keempat", lessons=lessons4, materials=materials1, multiple_choices=multiple_choices4, arrange_sentences=arrange_sentences4, short_answers=short_answer4)
+lessons_content5 = Lessons_Content(order=5, type="Grammar", title="Content belajar kelima", lessons=lessons5, materials=materials2, multiple_choices=multiple_choices5, arrange_sentences=arrange_sentences5, short_answers=short_answer5)
+
+db.session.add_all([lessons_content1, lessons_content2, lessons_content3, lessons_content4, lessons_content5])
 
 db.session.commit()

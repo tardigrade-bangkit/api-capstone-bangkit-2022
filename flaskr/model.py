@@ -51,7 +51,7 @@ class Users(db.Model):
 class Avatars(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    image_url = db.Column(db.String(length=100), nullable=False)
+    image_url = db.Column(db.String(length=255), nullable=False)
     
     users = db.relationship('Users', backref='avatar_users', lazy=True)
     children = db.relationship("Children", backref='avatar_children', lazy=True)
@@ -88,6 +88,7 @@ class Children_Achievements_Association(db.Model):
     achievements = db.relationship("Achievements", back_populates="children")
 
 class Children(db.Model):
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(length=50), unique=False, nullable=False)
     level = db.Column(db.Integer, unique=False, nullable=False)
@@ -99,29 +100,102 @@ class Children(db.Model):
     achievements = db.relationship('Children_Achievements_Association', back_populates="children")
     lessons = db.relationship('Progress_Association', back_populates="children")
     
+class Achievements(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    level = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.String(length=255), nullable=False)
+    children = db.relationship('Children_Achievements_Association', back_populates="achievements")
+    lessons = db.relationship('Lessons', backref="achievements", uselist=False) # one to one
+
+class Badges(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    image_url = db.Column(db.String(length=100), nullable=False)
+    children = db.relationship('Children_Badges_Association', back_populates="badges")
+    lessons = db.relationship('Lessons', backref="badges", uselist=False) # one to one 
+    
 class Lessons(db.Model):
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     cover_image = db.Column(db.String(length=100), unique=False, nullable=False)
     level = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String(length=100), unique=False, nullable=False)
     type = db.Column(db.String(length=100), nullable=False)
-    Badges_id = db.Column(db.Integer, db.ForeignKey('badges.id'))
-    Achievements_id = db.Column(db.Integer, db.ForeignKey('achievements.id'))
+    Badges_id = db.Column(db.Integer, db.ForeignKey('badges.id')) # one to one
+    Achievements_id = db.Column(db.Integer, db.ForeignKey('achievements.id')) # one to one
     
-    children = db.relationship('Progress_Association', back_populates="lessons")
+    children = db.relationship('Progress_Association', back_populates="lessons") # many to many
     
-class Achievements(db.Model):
+    lessons_content = db.relationship('Lessons_Content', backref='lessons', lazy=True) # one to many
+    
+class Lessons_Content(db.Model):
+    __tablename__ = 'Lessons_Content'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    level = db.Column(db.Integer, nullable=False)
-    description = db.Column(db.String(length=255), nullable=False)
-    children = db.relationship('Children_Achievements_Association', back_populates="achievements")
-    lessons = db.relationship('Lessons', backref="achievements", uselist=False)
+    order = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(length=100), nullable=False)
+    Lessons_id = db.Column(db.Integer, db.ForeignKey('lessons.id')) # many to one
+    Materials_id = db.Column(db.Integer, db.ForeignKey('materials.id'))
+    Multiple_Choices_id = db.Column(db.Integer, db.ForeignKey('multiple_choices.id'))
+    Arrange_Sentences_id = db.Column(db.Integer, db.ForeignKey('arrange_sentences.id'))
+    Short_Answers_id = db.Column(db.Integer, db.ForeignKey('short_answers.id'))
 
 
-class Badges(db.Model):
+    
+class Materials(db.Model):
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    image_url = db.Column(db.String(length=100), nullable=False)
-    children = db.relationship('Children_Badges_Association', back_populates="badges")
-    lessons = db.relationship('Lessons', backref="badges", uselist=False) ##one to one 
+    lessons_content = db.relationship('Lessons_Content', backref="materials", uselist=False) # one to one
+    
+# class Material_Content(db.Model):
+#     order = db.Column(db.Integer, nullable=False)
+#     text = db.Column(db.String(length=255), nullable=False)
+#     image = db.Column(db.String(length=255), nullable=False)
+#     audio = db.Column(db.String(length=255), nullable=False)
+#     Materials_id = db.Column(db.Integer, db.ForeignKey('materials.id'))
+class Multiple_choices(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    q_text = db.Column(db.String(length=255), nullable=False)
+    q_audio = db.Column(db.String(length=255), nullable=False)
+    q_image = db.Column(db.String(length=255), nullable=False)
+    answer = db.Column(db.String(length=1), nullable=False)
+    lessons_content = db.relationship('Lessons_Content', backref="multiple_choices", uselist=False) # one to one
 
 
+# class Multiple_Choices_Answers(db.Model):
+#     choice = db.Column(db.String(length=1), nullable=False)
+#     text = db.Column(db.Integer, nullable=True)
+#     audio = db.Column(db.Integer, nullable=True)
+#     image = db.Column(db.Integer, nullable=True)
+#     Multiple_Choices_id = db.Column(db.Integer, db.ForeignKey('multiple_choices.id'))
+    
+class Arrange_sentences(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    q_text = db.Column(db.String(length=255), nullable=True)
+    q_audio = db.Column(db.String(length=255), nullable=True)
+    q_image = db.Column(db.String(length=255), nullable=True)
+    answer = db.Column(db.String(length=255), nullable=False)
+    lessons_content = db.relationship('Lessons_Content', backref="arrange_sentences", uselist=False) # one to one
+
+    
+# class Arrange_Sentences_Answer_Choices(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     word = db.Column(db.String(length=255), nullable=False)
+#     Arrange_Sentences_id = db.Column(db.Integer, db.ForeignKey('arrange_sentences.id'))
+
+    
+class Short_answers(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    is_camera = db.Column(db.Boolean, nullable=False)
+    answer = db.Column(db.String(length=255), nullable=False)
+    q_text = db.Column(db.String(length=255), nullable=False)
+    q_audio = db.Column(db.String(length=255), nullable=False)
+    q_image = db.Column(db.String(length=255), nullable=False)
+    lessons_content = db.relationship('Lessons_Content', backref="short_answers", uselist=False) # one to one
+
+    
