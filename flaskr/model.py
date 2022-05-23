@@ -77,6 +77,20 @@ class Children_Badges_Association(db.Model):
     children = db.relationship("Children", back_populates="badges")
     badges = db.relationship("Badges", back_populates="children")
     
+class Children_Missions_Association(db.Model):
+    __tablename__ = "Children_Missions"
+    __table_args__ = {'extend_existing' : True}
+    status = db.Column(db.Integer, nullable=False)
+    active_date = db.Column(db.DateTime, nullable=False)
+    finish_date = db.Column(db.DateTime, nullable=False)
+    Children_id = db.Column(db.Integer, db.ForeignKey('children.id'), primary_key=True)
+    Missions_id = db.Column(db.Integer, db.ForeignKey('missions.id'), primary_key=True)
+    
+    children = db.relationship("Children", back_populates="missions")
+    missions = db.relationship("Missions", back_populates="children")
+    
+    #########
+    
 class Children_Achievements_Association(db.Model):
     __tablename__ = 'Children_Achievements'
     __table_args__ = {'extend_existing': True}
@@ -99,6 +113,7 @@ class Children(db.Model):
     badges = db.relationship('Children_Badges_Association', back_populates="children")
     achievements = db.relationship('Children_Achievements_Association', back_populates="children")
     lessons = db.relationship('Progress_Association', back_populates="children")
+    missions = db.relationship('Children_Missions_Association', back_populates="children")
     
 class Achievements(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -106,7 +121,18 @@ class Achievements(db.Model):
     level = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(length=255), nullable=False)
     children = db.relationship('Children_Achievements_Association', back_populates="achievements")
-    lessons = db.relationship('Lessons', backref="achievements", uselist=False) # one to one
+
+class Missions(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(length=255), )
+    type = db.Column(db.Integer, nullable=False)
+    c_duration = db.Column(db.Integer, nullable=False)
+    c_min_score = db.Column(db.Integer, nullable=False)
+    Lessons_id = db.Column(db.Integer, db.ForeignKey('lessons.id'))
+    
+    children = db.relationship('Children_Missions_Association', back_populates="missions")
+
 
 class Badges(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -123,10 +149,9 @@ class Lessons(db.Model):
     title = db.Column(db.String(length=100), unique=False, nullable=False)
     type = db.Column(db.String(length=100), nullable=False)
     Badges_id = db.Column(db.Integer, db.ForeignKey('badges.id')) # one to one
-    Achievements_id = db.Column(db.Integer, db.ForeignKey('achievements.id')) # one to one
     
     children = db.relationship('Progress_Association', back_populates="lessons") # many to many
-    
+    missions = db.relationship('Missions', backref='lessons', lazy=True)
     lessons_content = db.relationship('Lessons_Content', backref='lessons', lazy=True) # one to many
     
 class Lessons_Content(db.Model):

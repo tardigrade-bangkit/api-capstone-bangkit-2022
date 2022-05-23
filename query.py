@@ -1,4 +1,4 @@
-from flaskr.model import db,Achievements,Lessons_Content,Users,Avatars,Children,Badges,Lessons
+from flaskr.model import db,Achievements,Lessons_Content,Users,Avatars,Children,Badges,Lessons,Missions
 from flaskr.model import Multiple_choices,Short_answers,Arrange_sentences,Materials
 from flaskr.model import Children_Achievements_Association, Children_Badges_Association, Progress_Association
 from flaskr.model import Material_Content_Class, Multiple_Choices_Answers_Class, Arrange_Sentences_Answer_Choices_Class
@@ -45,6 +45,7 @@ badges6 = Badges(image_url="badgesimagesurl6.com")
 
 db.session.add_all([badges1, badges2, badges3, badges4, badges5, badges6])
 
+
 # children_badges1 = Children_Badges_Association(acquired_date=20052022, children=1, Badges_id=1)
 
 achievements1 = Achievements(level=1, description="Ini adalah achievement pertamamu")
@@ -53,14 +54,27 @@ achievements3 = Achievements(level=3, description="Ini adalah achievement ketiga
 
 db.session.add_all([achievements1, achievements2, achievements3])
 
-lessons1 = Lessons(cover_image="https://cover_image1", level=1, title="Pelajaran 1", type="Reading", badges=badges1, achievements=achievements1)
-lessons2 = Lessons(cover_image="https://cover_image2", level=2, title="Pelajaran 2", type="Writing", badges=badges2, achievements=achievements1)
-lessons3 = Lessons(cover_image="https://cover_image3", level=3, title="Pelajaran 3", type="Speaking", badges=badges3, achievements=achievements2)
-lessons4 = Lessons(cover_image="https://cover_image4", level=4, title="Pelajaran 4", type="Reading", badges=badges4, achievements=achievements2)
-lessons5 = Lessons(cover_image="https://cover_image5", level=5, title="Pelajaran 5", type="Writing", badges=badges5, achievements=achievements3)
-lessons6 = Lessons(cover_image="https://cover_image6", level=6, title="Pelajaran 6", type="Speaking", badges=badges6, achievements=achievements3)
+lessons1 = Lessons(cover_image="https://cover_image1", level=1, title="Pelajaran 1", type="Reading", badges=badges1)
+lessons2 = Lessons(cover_image="https://cover_image2", level=2, title="Pelajaran 2", type="Writing", badges=badges2)
+lessons3 = Lessons(cover_image="https://cover_image3", level=3, title="Pelajaran 3", type="Speaking", badges=badges3)
+lessons4 = Lessons(cover_image="https://cover_image4", level=4, title="Pelajaran 4", type="Reading", badges=badges4)
+lessons5 = Lessons(cover_image="https://cover_image5", level=5, title="Pelajaran 5", type="Writing", badges=badges5)
+lessons6 = Lessons(cover_image="https://cover_image6", level=6, title="Pelajaran 6", type="Speaking", badges=badges6)
 
 db.session.add_all([lessons1, lessons2, lessons3, lessons4, lessons5, lessons6])
+
+missions1 = Missions(title="Ini adalah mission 1", type="Adventures", c_duration=10, c_min_score=10, lessons=lessons1)
+missions2 = Missions(title="Ini adalah mission 2", type="Adventures", c_duration=20, c_min_score=20, lessons=lessons2)
+missions3 = Missions(title="Ini adalah mission 3", type="Adventures", c_duration=30, c_min_score=30, lessons=lessons1)
+missions4 = Missions(title="Ini adalah mission 4", type="Adventures", c_duration=40, c_min_score=40, lessons=lessons2)
+missions5 = Missions(title="Ini adalah mission 5", type="Adventures", c_duration=50, c_min_score=50, lessons=lessons3)
+missions6 = Missions(title="Ini adalah mission 6", type="Adventures", c_duration=10, c_min_score=10, lessons=lessons4)
+missions7 = Missions(title="Ini adalah mission 7", type="Adventures", c_duration=20, c_min_score=20, lessons=lessons3)
+missions8 = Missions(title="Ini adalah mission 8", type="Adventures", c_duration=30, c_min_score=30, lessons=lessons5)
+missions9 = Missions(title="Ini adalah mission 9", type="Adventures", c_duration=40, c_min_score=40, lessons=lessons6)
+missions10 = Missions(title="Ini adalah mission 10", type="Adventures", c_duration=50, c_min_score=50, lessons=lessons5)
+
+db.session.add_all([missions1, missions2, missions3, missions4, missions5, missions6, missions7, missions8, missions9, missions10])
 
 
 materials1 = Materials()
