@@ -89,8 +89,8 @@ class Children_Missions_Association(db.Model):
     __tablename__ = "Children_Missions"
     __table_args__ = {'extend_existing' : True}
     status = db.Column(db.Integer, nullable=False)
-    active_date = db.Column(db.DateTime, nullable=False)
-    finish_date = db.Column(db.DateTime, nullable=False)
+    active_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    finish_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     Children_id = db.Column(db.Integer, db.ForeignKey('children.id'), primary_key=True)
     Missions_id = db.Column(db.Integer, db.ForeignKey('missions.id'), primary_key=True)
     
