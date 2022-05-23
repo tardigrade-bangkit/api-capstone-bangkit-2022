@@ -4,6 +4,7 @@ from flaskr.__init__ import bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flaskr.__init__ import db
 import random
+from datetime import datetime
 
 NUMBERS = ['0','1','2','3','4','5','6','7','8','9']
 
@@ -56,7 +57,14 @@ class Avatars(db.Model):
     users = db.relationship('Users', backref='avatar_users', lazy=True)
     children = db.relationship("Children", backref='avatar_children', lazy=True)
     
-    
+
+class Usages(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    time_start = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    time_end = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
+    Children_id = db.Column(db.Integer, db.ForeignKey('children.id'))
+ 
 class Progress_Association(db.Model):
     __tablename__ = 'Progress'
     __table_args__ = {'extend_existing': True}
@@ -109,7 +117,7 @@ class Children(db.Model):
     Users_id  = db.Column(db.Integer, db.ForeignKey("users.id"))
     Avatars_id = db.Column(db.Integer, db.ForeignKey("avatars.id"))
 
-
+    usages = db.relationship('Usages', backref='children', lazy=True)
     badges = db.relationship('Children_Badges_Association', back_populates="children")
     achievements = db.relationship('Children_Achievements_Association', back_populates="children")
     lessons = db.relationship('Progress_Association', back_populates="children")

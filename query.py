@@ -1,4 +1,4 @@
-from flaskr.model import db,Achievements,Lessons_Content,Users,Avatars,Children,Badges,Lessons,Missions
+from flaskr.model import db,Achievements,Lessons_Content,Users,Usages,Avatars,Children,Badges,Lessons,Missions
 from flaskr.model import Multiple_choices,Short_answers,Arrange_sentences,Materials
 from flaskr.model import Children_Achievements_Association, Children_Badges_Association, Progress_Association
 from flaskr.model import Material_Content_Class, Multiple_Choices_Answers_Class, Arrange_Sentences_Answer_Choices_Class
@@ -35,6 +35,18 @@ children11 = Children(name="children8", level=11, users_children=user5, avatar_c
 children12 = Children(name="children9", level=12, users_children=user6, avatar_children=avatar3)
 
 db.session.add_all([children1,children2,children3,children4,children5,children6,children7,children8,children9])
+
+usages1 = Usages(children=children1)
+usages2 = Usages(children=children2)
+usages3 = Usages(children=children3)
+usages4 = Usages(children=children4)
+usages5 = Usages(children=children1)
+usages6 = Usages(children=children2)
+usages7 = Usages(children=children3)
+usages8 = Usages(children=children4)
+usages9 = Usages(children=children1)
+
+db.session.add_all([usages1, usages2, usages3, usages4, usages5, usages6, usages7, usages8, usages9])
 
 badges1 = Badges(image_url="badgesimagesurl1.com")
 badges2 = Badges(image_url="badgesimagesurl2.com")
