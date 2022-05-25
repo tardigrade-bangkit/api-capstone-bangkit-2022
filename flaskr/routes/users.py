@@ -4,7 +4,7 @@ import json
 from types import MethodDescriptorType
 import uuid ,jwt
 from multiprocessing import AuthenticationError
-from flaskr.model import Users, Children, db
+from flaskr.model import Lessons, Users, Children, db
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
@@ -213,4 +213,43 @@ def delete_one_children(children_id, id):
     db.session.commit()
     
     return jsonify({"msg" : "Children has been deleted"}), 201
+
+
+@app.route('/lessons', methods=['GET'])
+def get_lesson():
+    data = request.get_json()
+    query = Lessons.query.filter_by(level=data['level'])
+    
+    if not query:
+        return jsonify({"msg" : "Lessons not found"})
+    
+    lessons_with_same_level = []
+    
+    for lessons in query:
+        list_lessons = {}
+        list_lessons['id'] = lessons.id
+        list_lessons['title'] = lessons.title
+        list_lessons['cover_image'] = lessons.cover_image
+        list_lessons['type'] = lessons.type
+        
+        lessons_with_same_level.append(list_lessons)
+    
+    return jsonify({"users" : lessons_with_same_level})
+
+
+@app.route('/lessons/<int:lessons_id>', methods=['GET'])
+def get_lessons_content(lessons_id):
+    selected_lessons = Lessons.query.filter_by(id=lessons_id).first()
+    
+    if not selected_lessons:
+        return jsonify({"msg" : "Lessons not found"}), 401
+    
+    lessons_data = {}
+    lessons_data['id'] = selected_lessons.id
+    lessons_data['title'] = selected_lessons.title
+    lessons_data['cover_image'] = selected_lessons.cover_image
+    lessons_data['type'] = selected_lessons.type
+    
+    return jsonify({"user" : lessons_data})
+
 
