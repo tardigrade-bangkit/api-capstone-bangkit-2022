@@ -111,11 +111,11 @@ arrange_sentences5 = Arrange_sentences(q_text="What is Tam?", q_image="https://i
 
 db.session.add_all([arrange_sentences1, arrange_sentences2, arrange_sentences3, arrange_sentences4, arrange_sentences5])
 
-short_answer1 = Short_answers(is_camera=False, q_text="What is Yol?", q_image="https://images1.com", q_audio="https://audio1.com", answer="A")
-short_answer2 = Short_answers(is_camera=True, q_text="What is Han?", q_image="https://images2.com", q_audio="https://audio2.com", answer="B")
-short_answer3 = Short_answers(is_camera=False, q_text="What is Uf?", q_image="https://images3.com", q_audio="https://audio3.com", answer="C")
-short_answer4 = Short_answers(is_camera=False, q_text="What is Dan?", q_image="https://images4.com", q_audio="https://audio4.com", answer="D")
-short_answer5 = Short_answers(is_camera=True, q_text="What is Tam?", q_image="https://images5.com", q_audio="https://audio5.com", answer="A")
+short_answer1 = Short_answers(type="ini adalah perubahan dari is_camera", q_text="What is Yol?", q_image="https://images1.com", q_audio="https://audio1.com", answer="A")
+short_answer2 = Short_answers(type="ini adalah perubahan dari is_camera", q_text="What is Han?", q_image="https://images2.com", q_audio="https://audio2.com", answer="B")
+short_answer3 = Short_answers(type="ini adalah perubahan dari is_camera", q_text="What is Uf?", q_image="https://images3.com", q_audio="https://audio3.com", answer="C")
+short_answer4 = Short_answers(type="ini adalah perubahan dari is_camera", q_text="What is Dan?", q_image="https://images4.com", q_audio="https://audio4.com", answer="D")
+short_answer5 = Short_answers(type="ini adalah perubahan dari is_camera", q_text="What is Tam?", q_image="https://images5.com", q_audio="https://audio5.com", answer="A")
 
 db.session.add_all([short_answer1, short_answer2, short_answer3, short_answer4, short_answer5])
 

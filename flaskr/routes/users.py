@@ -1,16 +1,45 @@
+from datetime import datetime, timedelta
+from functools import wraps
+import token
+import uuid
+import jwt
+from multiprocessing import AuthenticationError
 from flaskr.model import Users, db
-from flaskr.__init__ import app
-from flask import jsonify, request
+from flaskr.__init__ import app, secret
+from flask import jsonify, make_response, request
 from flask_bcrypt import check_password_hash
+
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        if not token:
+            return jsonify({'message' : 'Token is missing !!'}), 401
+  
+        try:
+            data = jwt.decode(token, secret)
+            current_user = Users.query.filter_by(public_id = data['public_id']).first()
+        except:
+            return jsonify({
+                'message' : 'Token is invalid !!'
+            }), 401
+        # returns the current logged in users contex to the routes
+        return  f(current_user, *args, **kwargs)
+  
+    return decorated
 
 @app.route('/users', methods=["POST"])
 def add_user():
+    
     data = request.get_json()
     selected_email = Users.query.filter_by(email=data["email"]).first()
     if selected_email:
         return jsonify({"msg" : "User already taken, try with another email!"}), 400
     
-    new_user = Users(name=data['name'], email=data['email'], encode_password=data['password'])
+    new_user = Users(public_id=str(uuid.uuid4()), name=data['name'], email=data['email'], encode_password=data['password'], pin=0)
     
     db.session.add(new_user)
     db.session.commit()
@@ -18,6 +47,7 @@ def add_user():
     return jsonify({"msg" : "Created user successfully"}), 201
     
 @app.route('/users', methods=["GET"])
+@token_required
 def get_all_user():
     query = Users.query.all()
     all_user = []
@@ -32,7 +62,7 @@ def get_all_user():
     
     return jsonify({"users" : all_user})
 
-@app.route('/Userss/<int:id>', methods=["GET"])
+@app.route('/Users/<int:id>', methods=["GET"])
 def get_one_Users(id):
     user = Users.query.filter_by(id=id).first()
     
@@ -79,13 +109,28 @@ def delete_one_user(id):
 def user_login():
     data = request.get_json()
     selected_user = Users.query.filter_by(email=data["email"]).first()
-    if selected_user:
-        if not check_password_hash(selected_user.password, data["password"]):
-            return jsonify({"msg" : "Invalid password"}), 404
-        return jsonify({"msg" : "Login successfully"}), 201
 
-    return jsonify({"msg" : "Invalid email"}), 404
+    if not selected_user:
+        return jsonify({"msg" : "Invalid authorization "}), 404
 
-@app.route('/login/pin', methods=["POST"])
-def check_pin():
+    if check_password_hash(selected_user.password, data["password"]):
+        token = jwt.encode({
+            'public_id': selected_user.public_id,
+            'exp' : datetime.utcnow() + timedelta(minutes = 30)
+        }, secret, algorithm="HS256")
+        return jsonify({'token' : token}), 201
+
+    return jsonify({"msg" : "Invalid password"}), 404
+
+@app.route('/users/pin', methods=["POST"])
+def add_pin():
+    data = request.get_json()
+    selected_pin = Users.query.filter_by(pin=data["pin"])
+    if selected_pin != 0:
+        return jsonify({"msg" : "User already have pin"})
+    # selected_user
+    
+
+@app.route('/users/pin', methods=['GET'])
+def get_pin():
     pass

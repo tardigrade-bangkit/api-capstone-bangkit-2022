@@ -1,4 +1,5 @@
 from calendar import c
+from enum import unique
 from secrets import choice
 from flaskr.__init__ import bcrypt
 from flask_sqlalchemy import SQLAlchemy
@@ -11,10 +12,11 @@ NUMBERS = ['0','1','2','3','4','5','6','7','8','9']
 class Users(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(length=50), unique=True, nullable=False)
     password = db.Column(db.String(length=20), nullable=False)
     name = db.Column(db.String(length=50), unique=False, nullable=False)
-    pin = db.Column(db.String(length=6), unique=True, nullable=False)
+    pin = db.Column(db.String(length=6), unique=False, nullable=False)
     
     ## one to many = users - children
     children = db.relationship('Children', backref="users_children", lazy=True)
@@ -30,23 +32,13 @@ class Users(db.Model):
     def encode_password(self, password_to_hash):
         self.password = bcrypt.generate_password_hash(password_to_hash).decode("utf-8")
     
+    # @property
+    # def encode_pin(self):
+    #     return self.encode_pin
     
-    def get_random_pin(self):
-        list_pin=[]
-        fix_pin=""
-        for _ in range(6):
-            list_pin.append(random.choice(NUMBERS))
-        for number in list_pin:
-            fix_pin+=number
-        return fix_pin
-    
-    @property
-    def generate_pin(self):
-        return self.generate_pin
-    
-    @generate_pin.setter
-    def generate_pin(self):
-        self.pin = self.get_random_pin()
+    # @encode_pin
+    # def encode_pin(self, pin_to_hash):
+    #     self.pin = bcrypt.generate_password_hash(pin_to_hash).decode("utf-8")
 
 
 class Avatars(db.Model):
@@ -96,8 +88,6 @@ class Children_Missions_Association(db.Model):
     
     children = db.relationship("Children", back_populates="missions")
     missions = db.relationship("Missions", back_populates="children")
-    
-    #########
     
 class Children_Achievements_Association(db.Model):
     __tablename__ = 'Children_Achievements'
@@ -234,7 +224,7 @@ class Arrange_Sentences_Answer_Choices_Class(db.Model):
 class Short_answers(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    is_camera = db.Column(db.Boolean, nullable=False)
+    type = db.Column(db.String(length=255), nullable=False)
     answer = db.Column(db.String(length=255), nullable=False)
     q_text = db.Column(db.String(length=255), nullable=False)
     q_audio = db.Column(db.String(length=255), nullable=False)

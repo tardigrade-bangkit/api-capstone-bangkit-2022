@@ -8,6 +8,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/bangkit.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'mysecretkeyawesome'
+secret = app.config['SECRET_KEY']
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 # csrf.init_app(app)
