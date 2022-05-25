@@ -92,7 +92,7 @@ def update_one_user(id):
     
     return jsonify({"user" : "User has been updated"}), 201
 
-@app.route('/user/<int:id>', methods=['DELETE'])
+@app.route('/users/<int:id>', methods=['DELETE'])
 def delete_one_user(id):
     user = Users.query.filter_by(id=id).first()
 
@@ -185,3 +185,32 @@ def get_one_children(children_id, id):
     children_data['level'] = children.level
     
     return jsonify({"user" : children_data})
+
+
+@app.route('/users/<int:id>/children/<int:children_id>', methods=['PUT'])
+def update_one_children(children_id, id):
+    selected_children = Children.query.filter_by(id=children_id, Users_id=id).first()
+    if not selected_children:
+        return jsonify({"msg" : "Children not found"}), 401
+    
+    data = request.get_json()
+
+    selected_children.name = data["name"]
+
+    db.session.commit()
+    
+    return jsonify({"user" : "Children has been updated"}), 201
+
+
+@app.route('/users/<int:id>/children/<int:children_id>', methods=['DELETE'])
+def delete_one_children(children_id, id):
+    children = Children.query.filter_by(id=children_id, Users_id=id).first()
+
+    if not children:
+        return jsonify({"msg" : "Children not found"}), 401
+    
+    db.session.delete(children)
+    db.session.commit()
+    
+    return jsonify({"msg" : "Children has been deleted"}), 201
+
