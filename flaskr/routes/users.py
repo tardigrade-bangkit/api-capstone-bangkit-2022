@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta
 from functools import wraps
-import token
-import uuid
-import jwt
+import json
+from types import MethodDescriptorType
+import uuid ,jwt
 from multiprocessing import AuthenticationError
-from flaskr.model import Users, db
+from flaskr.model import Users, Children, db
 from flaskr.__init__ import app, secret
-from flask import jsonify, make_response, request
+from flask import jsonify, request
 from flask_bcrypt import check_password_hash
 
 
@@ -26,7 +26,6 @@ def token_required(f):
             return jsonify({
                 'message' : 'Token is invalid !!'
             }), 401
-        # returns the current logged in users contex to the routes
         return  f(current_user, *args, **kwargs)
   
     return decorated
@@ -58,11 +57,12 @@ def get_all_user():
         user_data['name'] = user.name
         user_data['email'] = user.email
         user_data['password'] = user.password
+        
         all_user.append(user_data)
     
     return jsonify({"users" : all_user})
 
-@app.route('/Users/<int:id>', methods=["GET"])
+@app.route('/users/<int:id>', methods=["GET"])
 def get_one_Users(id):
     user = Users.query.filter_by(id=id).first()
     
@@ -125,12 +125,63 @@ def user_login():
 @app.route('/users/pin', methods=["POST"])
 def add_pin():
     data = request.get_json()
-    selected_pin = Users.query.filter_by(pin=data["pin"])
-    if selected_pin != 0:
-        return jsonify({"msg" : "User already have pin"})
-    # selected_user
+    selected_user = Users.query.filter_by(email=data["email"]).first()
     
+    if selected_user.pin != 0:
+        return jsonify({"msg" : "User already have pin"})
+    
+    selected_user.pin = data["pin"]
+    db.session.commit()
+    
+    return jsonify({'msg' : 'Pin added successfully'})
 
-@app.route('/users/pin', methods=['GET'])
-def get_pin():
-    pass
+@app.route('/users/pin/check', methods=['POST'])
+def check_pin():
+    data = request.get_json()
+    selected_user = Users.query.filter_by(email=data["email"]).first()
+    
+    if selected_user != 0:
+        return jsonify({"msg" : "user already have pin"})
+    
+    return jsonify({"msg" : "user don't have pin"})
+
+
+
+@app.route('/users/<int:id>/children', methods=["POST"])
+def add_children(id):
+    data = request.get_json()
+    new_children = Children(name=data['name'], level=0, Users_id=id)
+    
+    db.session.add(new_children)
+    db.session.commit()
+    
+    return jsonify({"msg" : "Created children successfully"}), 201
+
+@app.route('/users/<int:id>/children', methods=['GET'])
+def get_all_children(id):
+
+    query = Children.query.filter_by(Users_id=id)
+    all_children = []
+    
+    for children in query:
+        children_data = {}
+        children_data['id'] = children.id
+        children_data['name'] = children.name
+        children_data['level'] = children.level
+        
+        all_children.append(children_data)
+    
+    return jsonify({"users" : all_children})
+
+@app.route('/users/<int:id>/children/<int:children_id>', methods=['GET'])
+def get_one_children(children_id, id):
+    children = Children.query.filter_by(id=children_id, Users_id=id).first()
+    if not children:
+        return jsonify({"msg" : "Children not found"}), 401
+    
+    children_data = {}
+    children_data['id'] = children.id
+    children_data['name'] = children.name
+    children_data['level'] = children.level
+    
+    return jsonify({"user" : children_data})
