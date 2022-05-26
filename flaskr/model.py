@@ -165,7 +165,9 @@ class Lessons_Content(db.Model):
     Arrange_Sentences_id = db.Column(db.Integer, db.ForeignKey('arrange_sentences.id'))
     Short_Answers_id = db.Column(db.Integer, db.ForeignKey('short_answers.id'))
 
-
+# class Quizzes(db.Model):
+#     __table_args__ = {'extend_existing': True}
+#     id = db.Column(db.Integer, primary_key=True)
     
 class Materials(db.Model):
     __table_args__ = {'extend_existing': True}

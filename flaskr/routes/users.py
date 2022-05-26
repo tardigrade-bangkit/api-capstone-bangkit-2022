@@ -4,7 +4,7 @@ import json
 from types import MethodDescriptorType
 import uuid ,jwt
 from multiprocessing import AuthenticationError
-from flaskr.model import Lessons, Users, Children, db
+from flaskr.model import Lessons, Lessons_Content, Users, Children, db
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
@@ -237,19 +237,24 @@ def get_lesson():
     return jsonify({"users" : lessons_with_same_level})
 
 
-@app.route('/lessons/<int:lessons_id>', methods=['GET'])
-def get_lessons_content(lessons_id):
-    selected_lessons = Lessons.query.filter_by(id=lessons_id).first()
+@app.route('/lessons/<int:id>', methods=['GET'])
+def get_lessons_content(id):
+    selected_lessons = Lessons_Content.query.filter_by(Lessons_id=id)
     
     if not selected_lessons:
         return jsonify({"msg" : "Lessons not found"}), 401
     
-    lessons_data = {}
-    lessons_data['id'] = selected_lessons.id
-    lessons_data['title'] = selected_lessons.title
-    lessons_data['cover_image'] = selected_lessons.cover_image
-    lessons_data['type'] = selected_lessons.type
+    all_lessons_content = []
     
-    return jsonify({"user" : lessons_data})
+    for lessons_content in selected_lessons:
+        lessons_content_data = {}
+        lessons_content_data['id'] = lessons_content.id
+        lessons_content_data['title'] = lessons_content.title
+        lessons_content_data['type'] = lessons_content.type
+        lessons_content_data['order'] = lessons_content.order
+        
+        all_lessons_content.append(lessons_content_data)
+    
+    return jsonify({"Lessons content" : all_lessons_content})
 
 
