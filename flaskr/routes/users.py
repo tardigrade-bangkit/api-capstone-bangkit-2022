@@ -463,4 +463,21 @@ def get_all_badges(current_user):
         
         all_badges.append(badges_data)
     
-    return jsonify({"missions" : all_badges})
+    return jsonify({"badges" : all_badges})
+
+@app.route('/badges/<int:id>', methods=['GET'])
+@token_required
+def get_all_badges_of_children(current_user, id):
+    query_badges = Badges.query.join(Badges.children).filter_by(Children_id=id).all() 
+    
+    all_badges = []
+    len_data = len(query_badges)
+
+    for i in range(0,len_data):
+        data = {}
+        data['id'] = query_badges[i].id
+        data['image_url'] = query_badges[i].image_url
+        
+        all_badges.append(data)
+    
+    return jsonify({"badges" : all_badges})
