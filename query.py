@@ -1,4 +1,4 @@
-from flaskr.model import db,Achievements,Lessons_Content,Users,Usages,Avatars,Children,Badges,Lessons,Missions
+from flaskr.model import Children_Missions_Association, db,Achievements,Lessons_Content,Users,Usages,Avatars,Children,Badges,Lessons,Missions
 from flaskr.model import Multiple_choices,Short_answers,Arrange_sentences,Materials,Quizzes,Questions_Class
 from flaskr.model import Children_Achievements_Association, Children_Badges_Association, Progress_Association
 from flaskr.model import Material_Content_Class, Multiple_Choices_Answers_Class, Arrange_Sentences_Answer_Choices_Class
@@ -60,11 +60,24 @@ db.session.add_all([badges1, badges2, badges3, badges4, badges5, badges6])
 
 # children_badges1 = Children_Badges_Association(acquired_date=20052022, children=1, Badges_id=1)
 
-achievements1 = Achievements(level=1, description="Ini adalah achievement pertamamu")
-achievements2 = Achievements(level=2, description="Ini adalah achievement keduamu")
-achievements3 = Achievements(level=3, description="Ini adalah achievement ketigamu")
+achievements1 = Achievements(name="mantap", image_url="https://iniurlnya.com", description="Ini adalah achievement pertamamu")
+achievements2 = Achievements(name="mantap", image_url="https://iniurlnya.com", description="Ini adalah achievement keduamu")
+achievements3 = Achievements(name="mantap", image_url="https://iniurlnya.com", description="Ini adalah achievement ketigamu")
 
 db.session.add_all([achievements1, achievements2, achievements3])
+
+children_achievement1 = Children_Achievements_Association(achievements=achievements1, children=children1)
+children_achievement2 = Children_Achievements_Association(achievements=achievements2, children=children1)
+children_achievement3 = Children_Achievements_Association(achievements=achievements3, children=children1)
+children_achievement4 = Children_Achievements_Association(achievements=achievements1, children=children2)
+children_achievement5 = Children_Achievements_Association(achievements=achievements2, children=children2)
+children_achievement6 = Children_Achievements_Association(achievements=achievements3, children=children2)
+children_achievement7 = Children_Achievements_Association(achievements=achievements1, children=children3)
+children_achievement8 = Children_Achievements_Association(achievements=achievements2, children=children3)
+children_achievement9 = Children_Achievements_Association(achievements=achievements1, children=children4)
+
+db.session.add_all([children_achievement1, children_achievement2, children_achievement3, children_achievement4, children_achievement5, children_achievement6, children_achievement7, children_achievement8, children_achievement9])
+
 
 lessons1 = Lessons(cover_image="https://cover_image1", level=1, title="Pelajaran 1", type="Reading", badges=badges1)
 lessons2 = Lessons(cover_image="https://cover_image2", level=2, title="Pelajaran 2", type="Writing", badges=badges2)
@@ -87,6 +100,30 @@ missions9 = Missions(title="Ini adalah mission 9", type=9, c_duration=40, c_min_
 missions10 = Missions(title="Ini adalah mission 10", type="Adventures", c_duration=50, c_min_score=50, lessons=lessons5)
 
 db.session.add_all([missions1, missions2, missions3, missions4, missions5, missions6, missions7, missions8, missions9, missions10])
+
+children_missions1 = Children_Missions_Association(status=1, missions=missions1, children=children1)
+children_missions2 = Children_Missions_Association(status=0, missions=missions2, children=children1)
+children_missions3 = Children_Missions_Association(status=1, missions=missions3, children=children1)
+children_missions4 = Children_Missions_Association(status=0, missions=missions1, children=children2)
+children_missions5 = Children_Missions_Association(status=1, missions=missions2, children=children2)
+children_missions6 = Children_Missions_Association(status=1, missions=missions3, children=children2)
+children_missions7 = Children_Missions_Association(status=1, missions=missions1, children=children3)
+children_missions8 = Children_Missions_Association(status=0, missions=missions2, children=children3)
+children_missions9 = Children_Missions_Association(status=1, missions=missions1, children=children4)
+
+db.session.add_all([children_missions1, children_missions2, children_missions3, children_missions4, children_missions5, children_missions6, children_missions7, children_missions8, children_missions9])
+
+children_badges1 = Children_Badges_Association(badges=badges1, children=children1)
+children_badges2 = Children_Badges_Association(badges=badges2, children=children1)
+children_badges3 = Children_Badges_Association(badges=badges3, children=children1)
+children_badges4 = Children_Badges_Association(badges=badges1, children=children2)
+children_badges5 = Children_Badges_Association(badges=badges2, children=children2)
+children_badges6 = Children_Badges_Association(badges=badges3, children=children2)
+children_badges7 = Children_Badges_Association(badges=badges1, children=children3)
+children_badges8 = Children_Badges_Association(badges=badges2, children=children3)
+children_badges9 = Children_Badges_Association(badges=badges1, children=children4)
+
+db.session.add_all([children_badges1, children_badges2, children_badges3, children_badges4, children_badges5, children_badges6, children_badges7, children_badges8, children_badges9])
 
 
 materials1 = Materials()

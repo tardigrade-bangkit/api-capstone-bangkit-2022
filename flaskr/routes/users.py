@@ -5,7 +5,7 @@ from types import MethodDescriptorType
 import uuid ,jwt
 from winreg import QueryReflectionKey
 from multiprocessing import AuthenticationError
-from flaskr.model import Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Lessons, Lessons_Content, Material_Content_Class, Materials, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Users, Children, db
+from flaskr.model import Achievements, Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Badges, Children_Achievements_Association, Lessons, Lessons_Content, Material_Content_Class, Materials, Missions, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Users, Children, db
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
@@ -126,7 +126,7 @@ def user_login():
 
     return jsonify({"msg" : "Invalid password"}), 404
 
-@app.route('/users/pin', methods=["POST"])
+@app.route('/pin', methods=["POST"])
 @token_required
 def add_pin(current_user):
     data = request.get_json()
@@ -140,7 +140,7 @@ def add_pin(current_user):
     
     return jsonify({'msg' : 'Pin added successfully'})
 
-@app.route('/users/pin/check', methods=['POST'])
+@app.route('/pin/check', methods=['POST'])
 @token_required
 def check_pin(current_user):
     data = request.get_json()
@@ -151,7 +151,7 @@ def check_pin(current_user):
     
     return jsonify({"msg" : "user don't have pin"})
 
-@app.route('/users/<int:id>/children', methods=["POST"])
+@app.route('/children', methods=["POST"])
 @token_required
 def add_children(current_user, id):
     data = request.get_json()
@@ -162,7 +162,7 @@ def add_children(current_user, id):
     
     return jsonify({"msg" : "Created children successfully"}), 201
 
-@app.route('/users/<int:id>/children', methods=['GET'])
+@app.route('/children', methods=['GET'])
 @token_required
 def get_all_children(current_user, id):
 
@@ -179,7 +179,7 @@ def get_all_children(current_user, id):
     
     return jsonify({"users" : all_children})
 
-@app.route('/users/<int:id>/children/<int:children_id>', methods=['GET'])
+@app.route('/children/<int:children_id>', methods=['GET'])
 @token_required
 def get_one_children(current_user, children_id, id):
     children = Children.query.filter_by(id=children_id, Users_id=id).first()
@@ -194,7 +194,7 @@ def get_one_children(current_user, children_id, id):
     return jsonify({"user" : children_data})
 
 
-@app.route('/users/<int:id>/children/<int:children_id>', methods=['PUT'])
+@app.route('/children/<int:children_id>', methods=['PUT'])
 @token_required
 def update_one_children(current_user, children_id, id):
     selected_children = Children.query.filter_by(id=children_id, Users_id=id).first()
@@ -210,7 +210,7 @@ def update_one_children(current_user, children_id, id):
     return jsonify({"user" : "Children has been updated"}), 201
 
 
-@app.route('/users/<int:id>/children/<int:children_id>', methods=['DELETE'])
+@app.route('/children/<int:children_id>', methods=['DELETE'])
 @token_required
 def delete_one_children(current_user, children_id, id):
     children = Children.query.filter_by(id=children_id, Users_id=id).first()
@@ -334,8 +334,6 @@ def get_questions_by_question_type(current_user, question_id):
         
         query_answer = Multiple_Choices_Answers_Class.query.filter_by(Multiple_Choices_id=query_short_answer.id)
         
-        all_questions_data.append(questions_data)
-        
         for answer in query_answer:
             questions_data['type']['answer'] = {
                 'answer_choice' : answer.choice,
@@ -374,4 +372,95 @@ def get_questions_by_question_type(current_user, question_id):
 
     return jsonify({"questions" : all_questions_data})
 
+
+
+@app.route('/achievements', methods=['GET'])
+@token_required
+def get_all_achievements(current_user):
+    query = Achievements.query.all()
+    all_achievements = []
     
+    for achievments in query:
+        achievments_data = {}
+        achievments_data['id'] = achievments.id
+        achievments_data['description'] = achievments.description
+        achievments_data['name'] = achievments.name
+        achievments_data['image_url'] = achievments.image_url
+        
+        all_achievements.append(achievments_data)
+    
+    return jsonify({"achievements" : all_achievements})
+
+
+@app.route('/achievements/<int:id>', methods=['GET'])
+@token_required
+def get_all_achievements_of_children(current_user, id):
+    query_achievements = Achievements.query.join(Achievements.children).filter_by(Children_id=id).all() 
+    
+    all_achievements = []
+    len_data = len(query_achievements)
+
+    for i in range(0,len_data):
+        data = {}
+        data['id'] = query_achievements[i].id
+        data['description'] = query_achievements[i].description
+        data['name'] = query_achievements[i].name
+        data['image_url'] = query_achievements[i].image_url
+        
+        all_achievements.append(data)
+    
+    return jsonify({"achievements" : all_achievements})
+
+
+@app.route('/missions', methods=['GET'])
+@token_required
+def get_all_missions(current_user):
+    query = Missions.query.all()
+    all_missions = []
+    
+    for missions in query:
+        missions_data = {}
+        missions_data['id'] = missions.id
+        missions_data['title'] = missions.title
+        missions_data['type'] = missions.type
+        missions_data['c_duration'] = missions.c_duration
+        missions_data['c_min_score'] = missions.c_min_score
+        
+        all_missions.append(missions_data)
+    
+    return jsonify({"missions" : all_missions})
+
+@app.route('/missions/<int:id>', methods=['GET'])
+@token_required
+def get_all_missions_of_children(current_user, id):
+    query_missions = Missions.query.join(Missions.children).filter_by(Children_id=id).all() 
+    
+    all_missions = []
+    len_data = len(query_missions)
+
+    for i in range(0,len_data):
+        data = {}
+        data['id'] = query_missions[i].id
+        data['title'] = query_missions[i].title
+        data['type'] = query_missions[i].type
+        data['c_duration'] = query_missions[i].c_duration
+        data['c_min_score'] = query_missions[i].c_min_score
+        
+        all_missions.append(data)
+    
+    return jsonify({"missions" : all_missions})
+
+@app.route('/badges', methods=['GET'])
+@token_required
+def get_all_badges(current_user):
+    query = Badges.query.all()
+    all_badges = []
+    
+    for badges in query:
+        badges_data = {}
+        badges_data['id'] = badges.id
+        badges_data['image_url'] = badges.image_url
+        
+        all_badges.append(badges_data)
+    
+    return jsonify({"missions" : all_badges})

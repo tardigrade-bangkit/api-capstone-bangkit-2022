@@ -69,7 +69,7 @@ class Progress_Association(db.Model):
 class Children_Badges_Association(db.Model):
     __tablename__ = 'Children_Badges'
     __table_args__ = {'extend_existing': True}
-    acquired_date = db.Column(db.Integer, nullable=False)
+    acquired_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     Children_id = db.Column(db.Integer, db.ForeignKey('children.id'), primary_key=True)
     Badges_id = db.Column(db.Integer, db.ForeignKey('badges.id'), primary_key=True)
     
@@ -91,7 +91,7 @@ class Children_Missions_Association(db.Model):
 class Children_Achievements_Association(db.Model):
     __tablename__ = 'Children_Achievements'
     __table_args__ = {'extend_existing': True}
-    acquired_date = db.Column(db.Integer, nullable=False)
+    acquired_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     Children_id = db.Column(db.Integer, db.ForeignKey('children.id'), primary_key=True)
     Achievements_id = db.Column(db.Integer, db.ForeignKey('achievements.id'), primary_key=True)
     
@@ -115,8 +115,9 @@ class Children(db.Model):
 class Achievements(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    level = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(length=255), nullable=False)
     description = db.Column(db.String(length=255), nullable=False)
+    image_url = db.Column(db.String(length=255), nullable=False)
     children = db.relationship('Children_Achievements_Association', back_populates="achievements")
 
 class Missions(db.Model):
