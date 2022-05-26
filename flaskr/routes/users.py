@@ -3,8 +3,9 @@ from functools import wraps
 import json
 from types import MethodDescriptorType
 import uuid ,jwt
+from winreg import QueryReflectionKey
 from multiprocessing import AuthenticationError
-from flaskr.model import Lessons, Lessons_Content, Users, Children, db
+from flaskr.model import Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Lessons, Lessons_Content, Material_Content_Class, Materials, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Users, Children, db
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
@@ -262,9 +263,115 @@ def get_lessons_content(current_user, id):
         lessons_content_data['title'] = lessons_content.title
         lessons_content_data['type'] = lessons_content.type
         lessons_content_data['order'] = lessons_content.order
+        lessons_content_data['Materials_id'] = lessons_content.Materials_id
+        lessons_content_data['Quizzes_id'] = lessons_content.Quizzes_id
         
         all_lessons_content.append(lessons_content_data)
     
     return jsonify({"Lessons content" : all_lessons_content})
 
 
+@app.route('/materials/<int:id>', methods=['GET'])
+@token_required
+def get_materials_content_by_id(current_user, id):
+    query = Material_Content_Class.query.filter_by(Materials_id=id)
+    
+    all_materials_content = []
+    
+    for materials_content in query:
+        materials_content_data = {}
+        materials_content_data['order'] = materials_content.order
+        materials_content_data['text'] = materials_content.text
+        materials_content_data['image'] = materials_content.image
+        materials_content_data['audio'] = materials_content.audio
+        
+        all_materials_content.append(materials_content_data)
+    
+    return jsonify({"materials content" : all_materials_content})
+
+
+@app.route('/quizzes/<int:id>', methods=['GET'])
+@token_required
+def get_all_questions_by_quizzes_id(current_user, id):
+    query = Questions_Class.query.filter_by(Quizzes_id=id)
+    
+    all_questions = []
+    
+    for questions in query:
+        questions_data = {}
+        questions_data['order'] = questions.order
+        questions_data['type'] = questions.type
+        
+        all_questions.append(questions_data)
+    
+    return jsonify({"materials content" : all_questions})
+
+
+@app.route('/questions/<int:question_id>', methods=['GET'])
+@token_required
+def get_questions_by_question_type(current_user, question_id):
+    query = Questions_Class.query.filter_by(id=question_id).first()
+
+    if not query:
+        return jsonify({"msg" : "Questions not found"}), 401
+    
+    all_questions_data = []
+    
+    questions_data = {}
+    questions_data['order'] = query.order
+    questions_data['type'] = query.type
+    # all_questions_data.append(questions_data)
+    
+    if query.type == 0:
+        query_short_answer = Multiple_choices.query.filter_by(id=question_id).first()
+
+        questions_data['type'] = {
+            'multiple_choice_text' : query_short_answer.q_text,
+            'multiple_choice_image' : query_short_answer.q_image,
+            'multiple_choice_audio' : query_short_answer.q_audio,
+            'answer' : query_short_answer.answer
+        }
+        
+        query_answer = Multiple_Choices_Answers_Class.query.filter_by(Multiple_Choices_id=query_short_answer.id)
+        
+        all_questions_data.append(questions_data)
+        
+        for answer in query_answer:
+            questions_data['type']['answer'] = {
+                'answer_choice' : answer.choice,
+                'answer_text' : answer.text,
+                'answer_audio' : answer.audio,
+                'answer_image' : answer.image
+            }
+        
+    elif query.type == 1:
+        query_arrange_sentences= Arrange_sentences.query.filter_by(id=question_id).first()
+        questions_data['type'] = {
+            'arrange_sentences_text' : query_arrange_sentences.q_text,
+            'arrange_sentences_image' : query_arrange_sentences.q_image,
+            'arrange_sentences_audio' : query_arrange_sentences.q_audio,
+            'answer' : query_arrange_sentences.answer
+        }
+        
+        query_answer = Arrange_Sentences_Answer_Choices_Class.query.filter_by(Arrange_Sentences_id=query_arrange_sentences.id)
+        
+        for answer in query_answer:
+            questions_data['type']['answer'] = {
+                'word' : answer.word
+            }
+
+    else:
+        query_short_answer = Short_answers.query.filter_by(id=question_id).first()
+        questions_data['type'] = {
+            'short_answer_type' : query_short_answer.type,
+            'short_answer_text' : query_short_answer.q_text,
+            'short_answer_image' : query_short_answer.q_image,
+            'short_answer_audio' : query_short_answer.q_audio,
+            'answer' : query_short_answer.answer
+        }
+        
+    all_questions_data.append(questions_data)
+
+    return jsonify({"questions" : all_questions_data})
+
+    

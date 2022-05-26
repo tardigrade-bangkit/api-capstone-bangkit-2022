@@ -171,11 +171,12 @@ class Materials(db.Model):
 class Material_Content_Class(db.Model):
     __tablename__ = 'Material_Content'
     __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
     order = db.Column(db.Integer, nullable=False)
     text = db.Column(db.String(length=255), nullable=False)
     image = db.Column(db.String(length=255), nullable=False)
     audio = db.Column(db.String(length=255), nullable=False)
-    Materials_id = db.Column(db.Integer, db.ForeignKey('materials.id'), primary_key=True)
+    Materials_id = db.Column(db.Integer, db.ForeignKey('materials.id'))
     
 class Quizzes(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -188,6 +189,7 @@ class Questions_Class(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     order = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.Integer, nullable=False)
     Quizzes_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
     Multiple_choices_id = db.Column(db.Integer, db.ForeignKey('multiple_choices.id'))
     Arrange_Sentences_id = db.Column(db.Integer, db.ForeignKey('arrange_sentences.id'))
