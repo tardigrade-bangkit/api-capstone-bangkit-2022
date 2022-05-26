@@ -20,8 +20,8 @@ def token_required(f):
             return jsonify({'message' : 'Token is missing !!'}), 401
   
         try:
-            data = jwt.decode(token, secret)
-            current_user = Users.query.filter_by(public_id = data['public_id']).first()
+            data = jwt.decode(token, secret, algorithms='HS256')
+            current_user = Users.query.filter_by(id = data['id']).first()
         except:
             return jsonify({
                 'message' : 'Token is invalid !!'
@@ -38,7 +38,7 @@ def add_user():
     if selected_email:
         return jsonify({"msg" : "User already taken, try with another email!"}), 400
     
-    new_user = Users(public_id=str(uuid.uuid4()), name=data['name'], email=data['email'], encode_password=data['password'], pin=0)
+    new_user = Users(name=data['name'], email=data['email'], encode_password=data['password'], pin=0)
     
     db.session.add(new_user)
     db.session.commit()
@@ -47,7 +47,7 @@ def add_user():
     
 @app.route('/users', methods=["GET"])
 @token_required
-def get_all_user():
+def get_all_user(current_user):
     query = Users.query.all()
     all_user = []
     
@@ -63,7 +63,8 @@ def get_all_user():
     return jsonify({"users" : all_user})
 
 @app.route('/users/<int:id>', methods=["GET"])
-def get_one_Users(id):
+@token_required
+def get_one_Users(current_user, id):
     user = Users.query.filter_by(id=id).first()
     
     if not user:
@@ -78,7 +79,8 @@ def get_one_Users(id):
     return jsonify({"user" : user_data})
 
 @app.route('/users/<int:id>', methods=['PUT'])
-def update_one_user(id):
+@token_required
+def update_one_user(current_user, id):
     user = Users.query.filter_by(id=id).first()
     if not user:
         return jsonify({"msg" : "User not found"}), 401
@@ -93,7 +95,8 @@ def update_one_user(id):
     return jsonify({"user" : "User has been updated"}), 201
 
 @app.route('/users/<int:id>', methods=['DELETE'])
-def delete_one_user(id):
+@token_required
+def delete_one_user(current_user, id):
     user = Users.query.filter_by(id=id).first()
 
     if not user:
@@ -115,7 +118,7 @@ def user_login():
 
     if check_password_hash(selected_user.password, data["password"]):
         token = jwt.encode({
-            'public_id': selected_user.public_id,
+            'id': selected_user.id,
             'exp' : datetime.utcnow() + timedelta(minutes = 30)
         }, secret, algorithm="HS256")
         return jsonify({'token' : token}), 201
@@ -123,7 +126,8 @@ def user_login():
     return jsonify({"msg" : "Invalid password"}), 404
 
 @app.route('/users/pin', methods=["POST"])
-def add_pin():
+@token_required
+def add_pin(current_user):
     data = request.get_json()
     selected_user = Users.query.filter_by(email=data["email"]).first()
     
@@ -136,7 +140,8 @@ def add_pin():
     return jsonify({'msg' : 'Pin added successfully'})
 
 @app.route('/users/pin/check', methods=['POST'])
-def check_pin():
+@token_required
+def check_pin(current_user):
     data = request.get_json()
     selected_user = Users.query.filter_by(email=data["email"]).first()
     
@@ -145,10 +150,9 @@ def check_pin():
     
     return jsonify({"msg" : "user don't have pin"})
 
-
-
 @app.route('/users/<int:id>/children', methods=["POST"])
-def add_children(id):
+@token_required
+def add_children(current_user, id):
     data = request.get_json()
     new_children = Children(name=data['name'], level=0, Users_id=id)
     
@@ -158,7 +162,8 @@ def add_children(id):
     return jsonify({"msg" : "Created children successfully"}), 201
 
 @app.route('/users/<int:id>/children', methods=['GET'])
-def get_all_children(id):
+@token_required
+def get_all_children(current_user, id):
 
     query = Children.query.filter_by(Users_id=id)
     all_children = []
@@ -174,7 +179,8 @@ def get_all_children(id):
     return jsonify({"users" : all_children})
 
 @app.route('/users/<int:id>/children/<int:children_id>', methods=['GET'])
-def get_one_children(children_id, id):
+@token_required
+def get_one_children(current_user, children_id, id):
     children = Children.query.filter_by(id=children_id, Users_id=id).first()
     if not children:
         return jsonify({"msg" : "Children not found"}), 401
@@ -188,7 +194,8 @@ def get_one_children(children_id, id):
 
 
 @app.route('/users/<int:id>/children/<int:children_id>', methods=['PUT'])
-def update_one_children(children_id, id):
+@token_required
+def update_one_children(current_user, children_id, id):
     selected_children = Children.query.filter_by(id=children_id, Users_id=id).first()
     if not selected_children:
         return jsonify({"msg" : "Children not found"}), 401
@@ -203,7 +210,8 @@ def update_one_children(children_id, id):
 
 
 @app.route('/users/<int:id>/children/<int:children_id>', methods=['DELETE'])
-def delete_one_children(children_id, id):
+@token_required
+def delete_one_children(current_user, children_id, id):
     children = Children.query.filter_by(id=children_id, Users_id=id).first()
 
     if not children:
@@ -216,7 +224,8 @@ def delete_one_children(children_id, id):
 
 
 @app.route('/lessons', methods=['GET'])
-def get_lesson():
+@token_required
+def get_lesson(current_user):
     data = request.get_json()
     query = Lessons.query.filter_by(level=data['level'])
     
@@ -238,7 +247,8 @@ def get_lesson():
 
 
 @app.route('/lessons/<int:id>', methods=['GET'])
-def get_lessons_content(id):
+@token_required
+def get_lessons_content(current_user, id):
     selected_lessons = Lessons_Content.query.filter_by(Lessons_id=id)
     
     if not selected_lessons:

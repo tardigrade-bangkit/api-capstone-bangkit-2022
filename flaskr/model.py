@@ -12,7 +12,6 @@ NUMBERS = ['0','1','2','3','4','5','6','7','8','9']
 class Users(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    public_id = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(length=50), unique=True, nullable=False)
     password = db.Column(db.String(length=20), nullable=False)
     name = db.Column(db.String(length=50), unique=False, nullable=False)
@@ -161,13 +160,7 @@ class Lessons_Content(db.Model):
     title = db.Column(db.String(length=100), nullable=False)
     Lessons_id = db.Column(db.Integer, db.ForeignKey('lessons.id')) # many to one
     Materials_id = db.Column(db.Integer, db.ForeignKey('materials.id'))
-    Multiple_Choices_id = db.Column(db.Integer, db.ForeignKey('multiple_choices.id'))
-    Arrange_Sentences_id = db.Column(db.Integer, db.ForeignKey('arrange_sentences.id'))
-    Short_Answers_id = db.Column(db.Integer, db.ForeignKey('short_answers.id'))
-
-# class Quizzes(db.Model):
-#     __table_args__ = {'extend_existing': True}
-#     id = db.Column(db.Integer, primary_key=True)
+    Quizzes_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
     
 class Materials(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -183,6 +176,23 @@ class Material_Content_Class(db.Model):
     image = db.Column(db.String(length=255), nullable=False)
     audio = db.Column(db.String(length=255), nullable=False)
     Materials_id = db.Column(db.Integer, db.ForeignKey('materials.id'), primary_key=True)
+    
+class Quizzes(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    lessons_content = db.relationship('Lessons_Content', backref="quizzes", uselist=False) # one to one
+    questions = db.relationship('Questions_Class', backref='quizzes', lazy=True)
+    
+class Questions_Class(db.Model):
+    __tablename__ = 'Questions'
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    order = db.Column(db.Integer, nullable=False)
+    Quizzes_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
+    Multiple_choices_id = db.Column(db.Integer, db.ForeignKey('multiple_choices.id'))
+    Arrange_Sentences_id = db.Column(db.Integer, db.ForeignKey('arrange_sentences.id'))
+    Short_Answers_id = db.Column(db.Integer, db.ForeignKey('short_answers.id'))
+    
 
 class Multiple_choices(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -191,7 +201,7 @@ class Multiple_choices(db.Model):
     q_audio = db.Column(db.String(length=255), nullable=False)
     q_image = db.Column(db.String(length=255), nullable=False)
     answer = db.Column(db.String(length=1), nullable=False)
-    lessons_content = db.relationship('Lessons_Content', backref="multiple_choices", uselist=False) # one to one
+    questions = db.relationship('Questions_Class', backref="multiple_choices", uselist=False) # one to one
     multiple_choices_answer = db.relationship('Multiple_Choices_Answers_Class', backref="multiple_choices", lazy=True)
 
 
@@ -211,7 +221,7 @@ class Arrange_sentences(db.Model):
     q_audio = db.Column(db.String(length=255), nullable=True)
     q_image = db.Column(db.String(length=255), nullable=True)
     answer = db.Column(db.String(length=255), nullable=False)
-    lessons_content = db.relationship('Lessons_Content', backref="arrange_sentences", uselist=False) # one to one
+    questions = db.relationship('Questions_Class', backref="arrange_sentences", uselist=False) # one to one
     arrange_sentences_answer_choices = db.relationship('Arrange_Sentences_Answer_Choices_Class', backref="arrange_sentences", lazy=True)
 
     
@@ -231,6 +241,6 @@ class Short_answers(db.Model):
     q_text = db.Column(db.String(length=255), nullable=False)
     q_audio = db.Column(db.String(length=255), nullable=False)
     q_image = db.Column(db.String(length=255), nullable=False)
-    lessons_content = db.relationship('Lessons_Content', backref="short_answers", uselist=False) # one to one
+    questions = db.relationship('Questions_Class', backref="short_answers", uselist=False) # one to one
 
     
