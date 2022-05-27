@@ -1,4 +1,4 @@
-from flaskr.model import Children_Missions_Association, db,Achievements,Lessons_Content,Users,Usages,Avatars,Children,Badges,Lessons,Missions
+from flaskr.model import Achievements, Children_Missions_Association, db,Missions,Lessons_Content,Users,Usages,Avatars,Children,Badges,Lessons,Missions
 from flaskr.model import Multiple_choices,Short_answers,Arrange_sentences,Materials,Quizzes,Questions_Class
 from flaskr.model import Children_Achievements_Association, Children_Badges_Association, Progress_Association
 from flaskr.model import Material_Content_Class, Multiple_Choices_Answers_Class, Arrange_Sentences_Answer_Choices_Class
@@ -34,7 +34,7 @@ children10 = Children(name="children7", level=10, users_children=user4, avatar_c
 children11 = Children(name="children8", level=11, users_children=user5, avatar_children=avatar2)
 children12 = Children(name="children9", level=12, users_children=user6, avatar_children=avatar3)
 
-db.session.add_all([children1,children2,children3,children4,children5,children6,children7,children8,children9])
+db.session.add_all([children1,children2,children3,children4,children5,children6,children7,children8,children9,children10,children11,children12])
 
 usages1 = Usages(children=children1)
 usages2 = Usages(children=children2)
@@ -60,9 +60,9 @@ db.session.add_all([badges1, badges2, badges3, badges4, badges5, badges6])
 
 # children_badges1 = Children_Badges_Association(acquired_date=20052022, children=1, Badges_id=1)
 
-achievements1 = Achievements(name="mantap", image_url="https://iniurlnya.com", description="Ini adalah achievement pertamamu")
-achievements2 = Achievements(name="mantap", image_url="https://iniurlnya.com", description="Ini adalah achievement keduamu")
-achievements3 = Achievements(name="mantap", image_url="https://iniurlnya.com", description="Ini adalah achievement ketigamu")
+achievements1 = Achievements(name="achievements 1", image_url="https://iniurlnya.com", description="Ini adalah achievement pertamamu")
+achievements2 = Achievements(name="achievements 2", image_url="https://iniurlnya.com", description="Ini adalah achievement keduamu")
+achievements3 = Achievements(name="achievements 3", image_url="https://iniurlnya.com", description="Ini adalah achievement ketigamu")
 
 db.session.add_all([achievements1, achievements2, achievements3])
 

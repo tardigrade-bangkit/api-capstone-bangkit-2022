@@ -5,7 +5,7 @@ from types import MethodDescriptorType
 import uuid ,jwt
 from winreg import QueryReflectionKey
 from multiprocessing import AuthenticationError
-from flaskr.model import Achievements, Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Badges, Children_Achievements_Association, Lessons, Lessons_Content, Material_Content_Class, Materials, Missions, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Users, Children, db
+from flaskr.model import Achievements, Children_Badges_Association, Missions, Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Badges, Children_Achievements_Association, Children_Missions_Association, Lessons, Lessons_Content, Material_Content_Class, Materials, Missions, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Users, Children, db
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
@@ -411,6 +411,31 @@ def get_all_achievements_of_children(current_user, id):
     
     return jsonify({"achievements" : all_achievements})
 
+@app.route('/achievements/<int:achievements_id>', methods=['POST'])  
+@token_required
+def add_children_achievement(current_user, achievements_id):
+    data = request.get_json()
+    selected_children_achievements = Children_Achievements_Association.query.filter_by(Children_id=data['Children_id']).all()
+    
+    check_achievements = Achievements.query.filter_by(id=achievements_id).first()
+    if not check_achievements:
+        return jsonify({"msg" : "Achievements doesn't exist"})
+
+    check_chidren = Children.query.filter_by(id=data['Children_id']).first()
+    if not check_chidren:
+        return jsonify({"msg" : "Children not exist"})
+        
+    for i in range(0, len(selected_children_achievements)):
+        if (achievements_id == selected_children_achievements[i].Achievements_id):
+            return jsonify({"msg" : "Cannot take same achievements"})
+    
+    new_children_achievements = Children_Achievements_Association(acquired_date=datetime.utcnow(), Achievements_id=achievements_id, Children_id=data['Children_id'])
+
+    db.session.add(new_children_achievements)
+    db.session.commit()
+    
+    return jsonify({"msg" : "Children achievement added successfully"}), 201
+
 
 @app.route('/missions', methods=['GET'])
 @token_required
@@ -450,6 +475,31 @@ def get_all_missions_of_children(current_user, id):
     
     return jsonify({"missions" : all_missions})
 
+@app.route('/missions/<int:missions_id>', methods=['POST'])  
+@token_required
+def add_children_missions(current_user, missions_id):
+    data = request.get_json()
+    selected_children_missions = Children_Missions_Association.query.filter_by(Children_id=data['Children_id']).all()
+    
+    check_missions = Missions.query.filter_by(id=missions_id).first()
+    if not check_missions:
+        return jsonify({"msg" : "Missions doesn't exist"})
+
+    check_chidren = Children.query.filter_by(id=data['Children_id']).first()
+    if not check_chidren:
+        return jsonify({"msg" : "Children not exist"})
+        
+    for i in range(0, len(selected_children_missions)):
+        if (missions_id == selected_children_missions[i].Missions_id):
+            return jsonify({"msg" : "Mission already taken"})
+    
+    new_children_missions = Children_Missions_Association(status=1, active_date=datetime.utcnow(), finish_date=datetime.utcnow() + timedelta(minutes=30), Missions_id=missions_id, Children_id=data['Children_id'])
+
+    db.session.add(new_children_missions)
+    db.session.commit()
+    
+    return jsonify({"msg" : "Children missions added successfully"}), 201
+
 @app.route('/badges', methods=['GET'])
 @token_required
 def get_all_badges(current_user):
@@ -481,3 +531,29 @@ def get_all_badges_of_children(current_user, id):
         all_badges.append(data)
     
     return jsonify({"badges" : all_badges})
+
+
+@app.route('/badges/<int:badges_id>', methods=['POST'])  
+@token_required
+def add_children_badges(current_user, badges_id):
+    data = request.get_json()
+    selected_children_badges = Children_Badges_Association.query.filter_by(Children_id=data['Children_id']).all()
+    
+    check_badges = Badges.query.filter_by(id=badges_id).first()
+    if not check_badges:
+        return jsonify({"msg" : "Badges doesn't exist"})
+
+    check_chidren = Children.query.filter_by(id=data['Children_id']).first()
+    if not check_chidren:
+        return jsonify({"msg" : "Children not exist"})
+        
+    for i in range(0, len(selected_children_badges)):
+        if (badges_id == selected_children_badges[i].Badges_id):
+            return jsonify({"msg" : "Badges already taken"})
+    
+    new_children_badges = Children_Badges_Association(Badges_id=badges_id, Children_id=data['Children_id'])
+
+    db.session.add(new_children_badges)
+    db.session.commit()
+    
+    return jsonify({"msg" : "Children badges added successfully"}), 201

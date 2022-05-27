@@ -111,13 +111,13 @@ class Children(db.Model):
     achievements = db.relationship('Children_Achievements_Association', back_populates="children")
     lessons = db.relationship('Progress_Association', back_populates="children")
     missions = db.relationship('Children_Missions_Association', back_populates="children")
-    
+
 class Achievements(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(length=255), nullable=False)
     description = db.Column(db.String(length=255), nullable=False)
-    image_url = db.Column(db.String(length=255), nullable=False)
+    name = db.Column(db.String(length=255), nullable=False)
+    image_url = db.Column(db.String(length=100), nullable=False)
     children = db.relationship('Children_Achievements_Association', back_populates="achievements")
 
 class Missions(db.Model):
@@ -130,8 +130,7 @@ class Missions(db.Model):
     Lessons_id = db.Column(db.Integer, db.ForeignKey('lessons.id'))
     
     children = db.relationship('Children_Missions_Association', back_populates="missions")
-
-
+    
 class Badges(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
