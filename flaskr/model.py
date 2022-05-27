@@ -60,6 +60,8 @@ class Progress_Association(db.Model):
     __tablename__ = 'Progress'
     __table_args__ = {'extend_existing': True}
     progress = db.Column(db.Integer, nullable=False)
+    score = db.Column(db.Integer, nullable=False)
+    finished_date = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
     Children_id = db.Column(db.Integer, db.ForeignKey('children.id'), primary_key=True)
     Lessons_id = db.Column(db.Integer, db.ForeignKey('lessons.id'), primary_key=True)
     

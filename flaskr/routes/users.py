@@ -224,7 +224,7 @@ def delete_one_children(current_user, children_id, id):
     return jsonify({"msg" : "Children has been deleted"}), 201
 
 
-@app.route('/lessons', methods=['GET'])
+@app.route('/lessons/level', methods=['GET'])
 @token_required
 def get_lesson(current_user):
     data = request.get_json()
@@ -247,7 +247,7 @@ def get_lesson(current_user):
     return jsonify({"users" : lessons_with_same_level})
 
 
-@app.route('/lessons/<int:id>', methods=['GET'])
+@app.route('/lessons/content/<int:id>', methods=['GET'])
 @token_required
 def get_lessons_content(current_user, id):
     selected_lessons = Lessons_Content.query.filter_by(Lessons_id=id)
@@ -557,3 +557,41 @@ def add_children_badges(current_user, badges_id):
     db.session.commit()
     
     return jsonify({"msg" : "Children badges added successfully"}), 201
+
+
+@app.route('/lessons', methods=['GET'])
+@token_required
+def get_all_lessons(current_user):
+    query = Lessons.query.all()
+    all_lessons = []
+    
+    for lessons in query:
+        lessons_data = {}
+        lessons_data['id'] = lessons.id
+        lessons_data['cover_image'] = lessons.cover_image
+        lessons_data['level'] = lessons.level
+        lessons_data['title'] = lessons.title
+        lessons_data['type'] = lessons.type
+        
+        all_lessons.append(lessons_data)
+    
+    return jsonify({"lessons" : all_lessons})
+
+@app.route('/lessons/<int:id>', methods=['GET'])
+@token_required
+def get_all_lessons_of_children(current_user, id):
+    query_lessons = Lessons.query.join(Lessons.children).filter_by(Children_id=id).all() 
+    
+    all_lessons = []
+
+    for i in range(0,len(query_lessons)):
+        data = {}
+        data['id'] = query_lessons[i].id
+        data['cover_image'] = query_lessons[i].cover_image 
+        data['level'] = query_lessons[i].level
+        data['title'] = query_lessons[i].title
+        data['type'] = query_lessons[i].type
+        
+        all_lessons.append(data)
+    
+    return jsonify({"lessons" : all_lessons})

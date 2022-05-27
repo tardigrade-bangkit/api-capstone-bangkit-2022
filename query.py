@@ -58,8 +58,6 @@ badges6 = Badges(image_url="badgesimagesurl6.com")
 db.session.add_all([badges1, badges2, badges3, badges4, badges5, badges6])
 
 
-# children_badges1 = Children_Badges_Association(acquired_date=20052022, children=1, Badges_id=1)
-
 achievements1 = Achievements(name="achievements 1", image_url="https://iniurlnya.com", description="Ini adalah achievement pertamamu")
 achievements2 = Achievements(name="achievements 2", image_url="https://iniurlnya.com", description="Ini adalah achievement keduamu")
 achievements3 = Achievements(name="achievements 3", image_url="https://iniurlnya.com", description="Ini adalah achievement ketigamu")
@@ -88,6 +86,21 @@ lessons6 = Lessons(cover_image="https://cover_image6", level=6, title="Pelajaran
 
 db.session.add_all([lessons1, lessons2, lessons3, lessons4, lessons5, lessons6])
 
+progress1 = Progress_Association(progress=1, score=10, children=children1, lessons=lessons1)
+progress2 = Progress_Association(progress=2, score=10, children=children1, lessons=lessons2)
+progress3 = Progress_Association(progress=3, score=10, children=children1, lessons=lessons3)
+progress4 = Progress_Association(progress=4, score=10, children=children1, lessons=lessons4)
+progress5 = Progress_Association(progress=5, score=10, children=children1, lessons=lessons5)
+progress6 = Progress_Association(progress=6, score=10, children=children1, lessons=lessons6)
+progress7 = Progress_Association(progress=7, score=10, children=children2, lessons=lessons1)
+progress8 = Progress_Association(progress=8, score=10, children=children3, lessons=lessons1)
+progress9 = Progress_Association(progress=9, score=10, children=children4, lessons=lessons1)
+progress10 = Progress_Association(progress=10, score=10, children=children2, lessons=lessons2)
+progress11 = Progress_Association(progress=11, score=10, children=children3, lessons=lessons2)
+progress12 = Progress_Association(progress=12, score=10, children=children5, lessons=lessons1)
+
+db.session.add_all([progress1, progress2, progress3, progress4, progress5, progress6, progress7, progress8, progress9, progress10, progress11, progress12])
+
 missions1 = Missions(title="Ini adalah mission 1", type=1, c_duration=10, c_min_score=10, lessons=lessons1)
 missions2 = Missions(title="Ini adalah mission 2", type=2, c_duration=20, c_min_score=20, lessons=lessons2)
 missions3 = Missions(title="Ini adalah mission 3", type=3, c_duration=30, c_min_score=30, lessons=lessons1)
@@ -97,7 +110,7 @@ missions6 = Missions(title="Ini adalah mission 6", type=6, c_duration=10, c_min_
 missions7 = Missions(title="Ini adalah mission 7", type=7, c_duration=20, c_min_score=20, lessons=lessons3)
 missions8 = Missions(title="Ini adalah mission 8", type=8, c_duration=30, c_min_score=30, lessons=lessons5)
 missions9 = Missions(title="Ini adalah mission 9", type=9, c_duration=40, c_min_score=40, lessons=lessons6)
-missions10 = Missions(title="Ini adalah mission 10", type="Adventures", c_duration=50, c_min_score=50, lessons=lessons5)
+missions10 = Missions(title="Ini adalah mission 10", type=10, c_duration=50, c_min_score=50, lessons=lessons5)
 
 db.session.add_all([missions1, missions2, missions3, missions4, missions5, missions6, missions7, missions8, missions9, missions10])
 
