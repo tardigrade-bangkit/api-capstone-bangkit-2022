@@ -5,7 +5,7 @@ from types import MethodDescriptorType
 import uuid ,jwt
 from winreg import QueryReflectionKey
 from multiprocessing import AuthenticationError
-from flaskr.model import Achievements, Children_Badges_Association, Missions, Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Badges, Children_Achievements_Association, Children_Missions_Association, Lessons, Lessons_Content, Material_Content_Class, Materials, Missions, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Users, Children, db
+from flaskr.model import Achievements, Children_Badges_Association, Missions, Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Badges, Children_Achievements_Association, Children_Missions_Association, Lessons, Lessons_Content, Material_Content_Class, Materials, Missions, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Usages, Users, Children, db
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
@@ -595,3 +595,20 @@ def get_all_lessons_of_children(current_user, id):
         all_lessons.append(data)
     
     return jsonify({"lessons" : all_lessons})
+
+
+@app.route('/usages/<int:children_id>', methods=['GET'])
+@token_required
+def get_all_usages_of_children(current_user, children_id):
+    query = Usages.query.filter_by(Children_id=children_id).all()
+
+    all_usages = []
+    
+    for i in range(0,len(query)):
+        data = {}
+        data['id'] = query[i].id
+        data['time_start'] = query[i].time_start
+        data['time_end'] = query[i].time_end
+        all_usages.append(data)
+        
+    return jsonify({"usages" : all_usages})
