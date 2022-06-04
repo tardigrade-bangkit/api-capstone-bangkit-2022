@@ -57,7 +57,6 @@ def get_all_user(current_user):
         user_data['id'] = user.id
         user_data['name'] = user.name
         user_data['email'] = user.email
-        user_data['password'] = user.password
         
         all_user.append(user_data)
     
@@ -75,7 +74,18 @@ def get_one_Users(current_user, id):
     user_data['id'] = user.id
     user_data['name'] = user.name
     user_data['email'] = user.email
-    user_data['password'] = user.password
+    
+    return jsonify({"user" : user_data})
+
+@app.route('/users/self', methods=["GET"])
+@token_required
+def get_self(current_user):
+    user_data = {
+        'id' : current_user.id,
+        'name' : current_user.name,
+        'email' : current_user.email,
+        'has_pin' : current_user.pin != "0"
+    }
     
     return jsonify({"user" : user_data})
 
@@ -122,7 +132,10 @@ def user_login():
             'id': selected_user.id,
             'exp' : datetime.utcnow() + timedelta(minutes = 30)
         }, secret, algorithm="HS256")
-        return jsonify({'token' : token}), 201
+        return jsonify({
+            'token' : token,
+            'has_pin': selected_user.pin != "0"
+            }), 201
 
     return jsonify({"msg" : "Invalid password"}), 404
 
