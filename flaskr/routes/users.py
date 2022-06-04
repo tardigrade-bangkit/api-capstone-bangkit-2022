@@ -143,12 +143,11 @@ def user_login():
 @token_required
 def add_pin(current_user):
     data = request.get_json()
-    selected_user = Users.query.filter_by(email=data["email"]).first()
     
-    if selected_user.pin != 0:
+    if current_user.pin != "0":
         return jsonify({"msg" : "User already have pin"})
     
-    selected_user.pin = data["pin"]
+    current_user.pin = data["pin"]
     db.session.commit()
     
     return jsonify({'msg' : 'Pin added successfully'})
@@ -157,9 +156,8 @@ def add_pin(current_user):
 @token_required
 def check_pin(current_user):
     data = request.get_json()
-    selected_user = Users.query.filter_by(email=data["email"]).first()
     
-    if selected_user != 0:
+    if current_user != "0":
         return jsonify({"msg" : "user already have pin"})
     
     return jsonify({"msg" : "user don't have pin"})
