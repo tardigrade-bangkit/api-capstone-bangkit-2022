@@ -3,7 +3,6 @@ from functools import wraps
 import json
 from types import MethodDescriptorType
 import uuid ,jwt
-from winreg import QueryReflectionKey
 from multiprocessing import AuthenticationError
 from flaskr.model import Achievements, Children_Badges_Association, Missions, Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Badges, Children_Achievements_Association, Children_Missions_Association, Lessons, Lessons_Content, Material_Content_Class, Materials, Missions, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Usages, Users, Children, db
 from flaskr.__init__ import app, secret
