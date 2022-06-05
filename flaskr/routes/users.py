@@ -8,7 +8,7 @@ from flaskr.model import Achievements, Children_Badges_Association, Missions, Ar
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
-import h5py
+# import h5py
 
 
 def token_required(f):
