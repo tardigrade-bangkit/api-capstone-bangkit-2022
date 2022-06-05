@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
 from functools import wraps
 import json
+import logging
 from types import MethodDescriptorType
 import uuid ,jwt
 from multiprocessing import AuthenticationError
-from flaskr.model import Achievements, Children_Badges_Association, Missions, Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Badges, Children_Achievements_Association, Children_Missions_Association, Lessons, Lessons_Content, Material_Content_Class, Materials, Missions, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Usages, Users, Children, db
+from flaskr.model import Achievements, Avatars, Children_Badges_Association, Missions, Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Badges, Children_Achievements_Association, Children_Missions_Association, Lessons, Lessons_Content, Material_Content_Class, Materials, Missions, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Usages, Users, Children, db
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
@@ -18,14 +19,14 @@ def token_required(f):
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
         if not token:
-            return jsonify({'message' : 'Token is missing !!'}), 401
+            return jsonify({'msg' : 'Token is missing !!'}), 401
   
         try:
             data = jwt.decode(token, secret, algorithms='HS256')
             current_user = Users.query.filter_by(id = data['id']).first()
         except:
             return jsonify({
-                'message' : 'Token is invalid !!'
+                'msg' : 'Token is invalid !!'
             }), 401
         return  f(current_user, *args, **kwargs)
   
@@ -143,32 +144,33 @@ def user_login():
 @token_required
 def add_pin(current_user):
     data = request.get_json()
-    selected_user = Users.query.filter_by(email=data["email"]).first()
     
-    if selected_user.pin != 0:
-        return jsonify({"msg" : "User already have pin"})
+    if current_user.pin != "0":
+        return jsonify({"msg" : "User already have pin"}), 400
     
-    selected_user.pin = data["pin"]
+    current_user.pin = data["pin"]
     db.session.commit()
     
-    return jsonify({'msg' : 'Pin added successfully'})
+    return jsonify({"msg" : "Pin added successfully"})
 
 @app.route('/pin/check', methods=['POST'])
 @token_required
 def check_pin(current_user):
     data = request.get_json()
-    selected_user = Users.query.filter_by(email=data["email"]).first()
     
-    if selected_user != 0:
-        return jsonify({"msg" : "user already have pin"})
+    if current_user.pin == "0":
+        return jsonify({"msg" : "User don't have pin"}), 400
     
-    return jsonify({"msg" : "user don't have pin"})
+    if (data["pin"] != current_user.pin):
+        return jsonify({"msg" : "Incorrect pin"}), 400
+
+    return jsonify({"msg" : "Correct pin"})
 
 @app.route('/children', methods=["POST"])
 @token_required
-def add_children(current_user, id):
+def add_children(current_user):
     data = request.get_json()
-    new_children = Children(name=data['name'], level=0, Users_id=id)
+    new_children = Children(name=data['name'], level=0, Users_id=current_user.id, Avatars_id=data['avatar'])
     
     db.session.add(new_children)
     db.session.commit()
@@ -177,9 +179,9 @@ def add_children(current_user, id):
 
 @app.route('/children', methods=['GET'])
 @token_required
-def get_all_children(current_user, id):
+def get_all_children(current_user):
 
-    query = Children.query.filter_by(Users_id=id)
+    query = Children.query.filter_by(Users_id=current_user.id).join(Children.avatar_children).all()
     all_children = []
     
     for children in query:
@@ -187,10 +189,11 @@ def get_all_children(current_user, id):
         children_data['id'] = children.id
         children_data['name'] = children.name
         children_data['level'] = children.level
+        children_data['avatar'] = children.avatar_children.image_url
         
         all_children.append(children_data)
     
-    return jsonify({"users" : all_children})
+    return jsonify({"children" : all_children})
 
 @app.route('/children/<int:children_id>', methods=['GET'])
 @token_required
@@ -645,3 +648,16 @@ def get_short_answer(current_user, answer_id):
 # @token_required
 # def get_short_answer(current_user, answer_id):
 #     pass
+@app.route('/avatars', methods=['GET'])
+def get_all_avatars():
+    query = Avatars.query.all()
+    all_avatars = []
+    
+    for avatars in query:
+        avatars_data = {}
+        avatars_data['id'] = avatars.id
+        avatars_data['image_url'] = avatars.image_url
+        
+        all_avatars.append(avatars_data)
+    
+    return jsonify({"avatars" : all_avatars})
