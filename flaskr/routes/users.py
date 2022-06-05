@@ -8,6 +8,7 @@ from flaskr.model import Achievements, Children_Badges_Association, Missions, Ar
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
+import h5py
 
 
 def token_required(f):
@@ -624,3 +625,23 @@ def get_all_usages_of_children(current_user, children_id):
         all_usages.append(data)
         
     return jsonify({"usages" : all_usages})
+
+
+
+
+@app.route('/questions/multiple_choices/<int:answer_id>', methods=['GET'])
+@token_required
+def get_short_answer(current_user, answer_id):
+    pass
+
+
+# @app.route('/questions/arrange_sentences/<int:answer_id>', methods=['GET'])
+# @token_required
+# def get_short_answer(current_user, answer_id):
+#     pass
+
+
+# @app.route('/questions/short_answer/<int:answer_id>', methods=['GET'])
+# @token_required
+# def get_short_answer(current_user, answer_id):
+#     pass

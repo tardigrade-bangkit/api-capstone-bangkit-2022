@@ -55,18 +55,32 @@ class Usages(db.Model):
     time_start = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     time_end = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
     Children_id = db.Column(db.Integer, db.ForeignKey('children.id'))
- 
-class Progress_Association(db.Model):
-    __tablename__ = 'Progress'
+    
+class Scores_Association(db.Model):
+    __tablename__ = 'Scores'
     __table_args__ = {'extend_existing': True}
-    progress = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    Quizzess_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'), primary_key=True)
+    Progress_id = db.Column(db.Integer, db.ForeignKey('progress.id'), primary_key=True)
+    
+    quizzes = db.relationship("Quizzes", back_populates="progress")
+    progress = db.relationship("Progress", back_populates="quizzes")
+
+class Progress(db.Model):
+    __tablename__ = 'progress'
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    progress = db.Column(db.Integer, nullable=False)
     finished_date = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
-    Children_id = db.Column(db.Integer, db.ForeignKey('children.id'), primary_key=True)
-    Lessons_id = db.Column(db.Integer, db.ForeignKey('lessons.id'), primary_key=True)
+    Children_id = db.Column(db.Integer, db.ForeignKey('children.id'))
+    Lessons_id = db.Column(db.Integer, db.ForeignKey('lessons.id'))
     
     children = db.relationship("Children", back_populates="lessons")
     lessons = db.relationship("Lessons", back_populates="children")
+
+    quizzes = db.relationship('Scores_Association', back_populates="progress")
+ 
 
 class Children_Badges_Association(db.Model):
     __tablename__ = 'Children_Badges'
@@ -105,13 +119,14 @@ class Children(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(length=50), unique=False, nullable=False)
     level = db.Column(db.Integer, unique=False, nullable=False)
+    tgl_lahir = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     Users_id  = db.Column(db.Integer, db.ForeignKey("users.id"))
     Avatars_id = db.Column(db.Integer, db.ForeignKey("avatars.id"))
 
     usages = db.relationship('Usages', backref='children', lazy=True)
     badges = db.relationship('Children_Badges_Association', back_populates="children")
     achievements = db.relationship('Children_Achievements_Association', back_populates="children")
-    lessons = db.relationship('Progress_Association', back_populates="children")
+    lessons = db.relationship('Progress', back_populates="children")
     missions = db.relationship('Children_Missions_Association', back_populates="children")
 
 class Achievements(db.Model):
@@ -149,7 +164,7 @@ class Lessons(db.Model):
     type = db.Column(db.String(length=100), nullable=False)
     Badges_id = db.Column(db.Integer, db.ForeignKey('badges.id')) # one to one
     
-    children = db.relationship('Progress_Association', back_populates="lessons") # many to many
+    children = db.relationship('Progress', back_populates="lessons") # many to many
     missions = db.relationship('Missions', backref='lessons', lazy=True)
     lessons_content = db.relationship('Lessons_Content', backref='lessons', lazy=True) # one to many
     
@@ -183,8 +198,13 @@ class Material_Content_Class(db.Model):
 class Quizzes(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
+    is_final = db.Column(db.Boolean, nullable=False)
+    
     lessons_content = db.relationship('Lessons_Content', backref="quizzes", uselist=False) # one to one
     questions = db.relationship('Questions_Class', backref='quizzes', lazy=True)
+    
+    progress = db.relationship('Scores_Association', back_populates="quizzes")
+
     
 class Questions_Class(db.Model):
     __tablename__ = 'Questions'

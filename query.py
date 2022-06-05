@@ -1,6 +1,6 @@
 from flaskr.model import Achievements, Children_Missions_Association, db,Missions,Lessons_Content,Users,Usages,Avatars,Children,Badges,Lessons,Missions
 from flaskr.model import Multiple_choices,Short_answers,Arrange_sentences,Materials,Quizzes,Questions_Class
-from flaskr.model import Children_Achievements_Association, Children_Badges_Association, Progress_Association
+from flaskr.model import Children_Achievements_Association, Children_Badges_Association, Scores_Association, Progress
 from flaskr.model import Material_Content_Class, Multiple_Choices_Answers_Class, Arrange_Sentences_Answer_Choices_Class
 db.drop_all()
 db.create_all()
@@ -86,18 +86,18 @@ lessons6 = Lessons(cover_image="https://cover_image6", level=6, title="Pelajaran
 
 db.session.add_all([lessons1, lessons2, lessons3, lessons4, lessons5, lessons6])
 
-progress1 = Progress_Association(progress=1, score=10, children=children1, lessons=lessons1)
-progress2 = Progress_Association(progress=2, score=10, children=children1, lessons=lessons2)
-progress3 = Progress_Association(progress=3, score=10, children=children1, lessons=lessons3)
-progress4 = Progress_Association(progress=4, score=10, children=children1, lessons=lessons4)
-progress5 = Progress_Association(progress=5, score=10, children=children1, lessons=lessons5)
-progress6 = Progress_Association(progress=6, score=10, children=children1, lessons=lessons6)
-progress7 = Progress_Association(progress=7, score=10, children=children2, lessons=lessons1)
-progress8 = Progress_Association(progress=8, score=10, children=children3, lessons=lessons1)
-progress9 = Progress_Association(progress=9, score=10, children=children4, lessons=lessons1)
-progress10 = Progress_Association(progress=10, score=10, children=children2, lessons=lessons2)
-progress11 = Progress_Association(progress=11, score=10, children=children3, lessons=lessons2)
-progress12 = Progress_Association(progress=12, score=10, children=children5, lessons=lessons1)
+progress1 = Progress(progress=1, children=children1, lessons=lessons1)
+progress2 = Progress(progress=2, children=children1, lessons=lessons2)
+progress3 = Progress(progress=3, children=children1, lessons=lessons3)
+progress4 = Progress(progress=4, children=children1, lessons=lessons4)
+progress5 = Progress(progress=5, children=children1, lessons=lessons5)
+progress6 = Progress(progress=6, children=children1, lessons=lessons6)
+progress7 = Progress(progress=7, children=children2, lessons=lessons1)
+progress8 = Progress(progress=8, children=children3, lessons=lessons1)
+progress9 = Progress(progress=9, children=children4, lessons=lessons1)
+progress10 = Progress(progress=10, children=children2, lessons=lessons2)
+progress11 = Progress(progress=11, children=children3, lessons=lessons2)
+progress12 = Progress(progress=12, children=children5, lessons=lessons1)
 
 db.session.add_all([progress1, progress2, progress3, progress4, progress5, progress6, progress7, progress8, progress9, progress10, progress11, progress12])
 
@@ -192,11 +192,11 @@ short_answer10 = Short_answers(type="ini adalah perubahan dari is_camera", q_tex
 db.session.add_all([short_answer1, short_answer2, short_answer3, short_answer4, short_answer5, short_answer6, short_answer7, short_answer8, short_answer9, short_answer10])
 
 
-quizzes1 = Quizzes()
-quizzes2 = Quizzes()
-quizzes3 = Quizzes()
-quizzes4 = Quizzes()
-quizzes5 = Quizzes()
+quizzes1 = Quizzes(is_final=False)
+quizzes2 = Quizzes(is_final=True)
+quizzes3 = Quizzes(is_final=True)
+quizzes4 = Quizzes(is_final=False)
+quizzes5 = Quizzes(is_final=False)
 # quizzes6 = Quizzes()
 # quizzes7 = Quizzes()
 # quizzes8 = Quizzes()
@@ -205,6 +205,19 @@ quizzes5 = Quizzes()
 
 # db.session.add_all([quizzes1, quizzes2, quizzes3, quizzes4, quizzes5, quizzes6, quizzes7, quizzes8, quizzes9, quizzes10])
 db.session.add_all([quizzes1, quizzes2, quizzes3, quizzes4, quizzes5])
+
+score1 = Scores_Association(score=10, quizzes=quizzes1, progress=progress1)
+score2 = Scores_Association(score=10, quizzes=quizzes1, progress=progress2)
+score3 = Scores_Association(score=10, quizzes=quizzes1, progress=progress3)
+score4 = Scores_Association(score=10, quizzes=quizzes2, progress=progress1)
+score5 = Scores_Association(score=10, quizzes=quizzes2, progress=progress2)
+score6 = Scores_Association(score=10, quizzes=quizzes2, progress=progress3)
+score7 = Scores_Association(score=10, quizzes=quizzes3, progress=progress1)
+score8 = Scores_Association(score=10, quizzes=quizzes3, progress=progress2)
+score9 = Scores_Association(score=10, quizzes=quizzes3, progress=progress3)
+
+db.session.add_all([score1, score2, score3, score4, score5, score6, score7, score8, score9])
+
 
 lessons_content1 = Lessons_Content(order=1, type=1, title="Content belajar pertama", lessons=lessons1, materials=materials1, quizzes=quizzes1)
 lessons_content2 = Lessons_Content(order=2, type=2, title="Content belajar kedua", lessons=lessons2, materials=materials2, quizzes=quizzes2)
