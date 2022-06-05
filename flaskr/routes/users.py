@@ -18,14 +18,14 @@ def token_required(f):
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
         if not token:
-            return jsonify({'message' : 'Token is missing !!'}), 401
+            return jsonify({'msg' : 'Token is missing !!'}), 401
   
         try:
             data = jwt.decode(token, secret, algorithms='HS256')
             current_user = Users.query.filter_by(id = data['id']).first()
         except:
             return jsonify({
-                'message' : 'Token is invalid !!'
+                'msg' : 'Token is invalid !!'
             }), 401
         return  f(current_user, *args, **kwargs)
   
@@ -145,22 +145,25 @@ def add_pin(current_user):
     data = request.get_json()
     
     if current_user.pin != "0":
-        return jsonify({"msg" : "User already have pin"})
+        return jsonify({"msg" : "User already have pin"}), 400
     
     current_user.pin = data["pin"]
     db.session.commit()
     
-    return jsonify({'msg' : 'Pin added successfully'})
+    return jsonify({"msg" : "Pin added successfully"})
 
 @app.route('/pin/check', methods=['POST'])
 @token_required
 def check_pin(current_user):
     data = request.get_json()
     
-    if current_user != "0":
-        return jsonify({"msg" : "user already have pin"})
+    if current_user.pin == "0":
+        return jsonify({"msg" : "User don't have pin"}), 400
     
-    return jsonify({"msg" : "user don't have pin"})
+    if (data["pin"] != current_user.pin):
+        return jsonify({"msg" : "Incorrect pin"}), 400
+
+    return jsonify({"msg" : "Correct pin"})
 
 @app.route('/children', methods=["POST"])
 @token_required
