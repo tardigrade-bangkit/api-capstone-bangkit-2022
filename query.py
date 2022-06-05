@@ -6,9 +6,9 @@ db.drop_all()
 db.create_all()
 # Multiple_choices_answers, Arrange_sentences_answer_choices
 
-avatar1 = Avatars(image_url="https://user1wioeurouweruowe.com") 
-avatar2 = Avatars(image_url="https://user2wioeurouweruowe.com") 
-avatar3 = Avatars(image_url="https://user3wioeurouweruowe.com") 
+avatar1 = Avatars(image_url="https://i.pravatar.cc/300?u=1") 
+avatar2 = Avatars(image_url="https://i.pravatar.cc/300?u=2") 
+avatar3 = Avatars(image_url="https://i.pravatar.cc/300?u=3") 
 
 db.session.add_all([avatar1,avatar2,avatar3])
 
