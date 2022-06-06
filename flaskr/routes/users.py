@@ -18,18 +18,24 @@ def token_required(f):
         token = None
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
+
         if not token:
             return jsonify({'msg' : 'Token is missing !!'}), 401
-  
+
+        current_user = None
         try:
             data = jwt.decode(token, secret, algorithms='HS256')
             current_user = Users.query.filter_by(id = data['id']).first()
-        except:
+        except Exception as e:
+            logging.exception(e)
+
+        if not current_user:
             return jsonify({
-                'msg' : 'Token is invalid !!'
+                'msg' : 'Token is invalid'
             }), 401
+
         return  f(current_user, *args, **kwargs)
-  
+
     return decorated
 
 @app.route('/users', methods=["POST"])
@@ -40,7 +46,13 @@ def add_user():
     if selected_email:
         return jsonify({"msg" : "User already taken, try with another email!"}), 400
     
-    new_user = Users(name=data['name'], email=data['email'], encode_password=data['password'], pin=0)
+    new_user = Users(
+        name=data['name'], 
+        email=data['email'], 
+        encode_password=data['password'], 
+        pin=0,
+        Avatars_id=1,
+    )
     
     db.session.add(new_user)
     db.session.commit()
@@ -50,7 +62,7 @@ def add_user():
 @app.route('/users', methods=["GET"])
 @token_required
 def get_all_user(current_user):
-    query = Users.query.all()
+    query = Users.query.join(Users.avatar_users).all()
     all_user = []
     
     for user in query:
@@ -58,6 +70,7 @@ def get_all_user(current_user):
         user_data['id'] = user.id
         user_data['name'] = user.name
         user_data['email'] = user.email
+        user_data['avatar'] = user.avatar_users.image_url
         
         all_user.append(user_data)
     
@@ -81,11 +94,14 @@ def get_one_Users(current_user, id):
 @app.route('/users/self', methods=["GET"])
 @token_required
 def get_self(current_user):
+    avatar = Avatars.query.filter_by(id=current_user.Avatars_id).first()
+
     user_data = {
         'id' : current_user.id,
         'name' : current_user.name,
         'email' : current_user.email,
-        'has_pin' : current_user.pin != "0"
+        'has_pin' : current_user.pin != "0",
+        'avatar' : avatar.image_url
     }
     
     return jsonify({"user" : user_data})
@@ -170,8 +186,15 @@ def check_pin(current_user):
 @token_required
 def add_children(current_user):
     data = request.get_json()
-    new_children = Children(name=data['name'], level=0, Users_id=current_user.id, Avatars_id=data['avatar'])
-    
+
+    new_children = Children(
+        name=data['name'], 
+        level=0, 
+        Users_id=current_user.id, 
+        Avatars_id=data['avatar'], 
+        tgl_lahir=datetime.strptime(data["birthdate"], '%d/%m/%Y')
+    )
+
     db.session.add(new_children)
     db.session.commit()
     
@@ -190,6 +213,7 @@ def get_all_children(current_user):
         children_data['name'] = children.name
         children_data['level'] = children.level
         children_data['avatar'] = children.avatar_children.image_url
+        children_data['birthdate'] = children.tgl_lahir.strftime('%d/%m/%Y')
         
         all_children.append(children_data)
     
