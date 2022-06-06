@@ -306,7 +306,7 @@ def get_lessons_content(current_user, id):
         
         all_lessons_content.append(lessons_content_data)
     
-    return jsonify({"Lessons content" : all_lessons_content})
+    return jsonify({"lesson_contents" : all_lessons_content})
 
 
 @app.route('/materials/<int:id>', methods=['GET'])
@@ -325,7 +325,7 @@ def get_materials_content_by_id(current_user, id):
         
         all_materials_content.append(materials_content_data)
     
-    return jsonify({"materials content" : all_materials_content})
+    return jsonify({"material_contents" : all_materials_content})
 
 
 @app.route('/quizzes/<int:id>', methods=['GET'])
@@ -342,7 +342,7 @@ def get_all_questions_by_quizzes_id(current_user, id):
         
         all_questions.append(questions_data)
     
-    return jsonify({"materials content" : all_questions})
+    return jsonify({"questions" : all_questions})
 
 
 @app.route('/questions/<int:question_id>', methods=['GET'])
@@ -353,64 +353,55 @@ def get_questions_by_question_type(current_user, question_id):
     if not query:
         return jsonify({"msg" : "Questions not found"}), 401
     
-    all_questions_data = []
-    
     questions_data = {}
     questions_data['order'] = query.order
     questions_data['type'] = query.type
-    # all_questions_data.append(questions_data)
     
     if query.type == 0:
-        query_short_answer = Multiple_choices.query.filter_by(id=question_id).first()
+        multiple_choices = Multiple_choices.query.filter_by(id=question_id).first()
+        
+        query_answer = Multiple_Choices_Answers_Class.query.filter_by(Multiple_Choices_id=multiple_choices.id)
+        questions_data['question_text'] = multiple_choices.q_text
+        questions_data['question_image'] = multiple_choices.q_image
+        questions_data['question_audio'] = multiple_choices.q_audio
+        questions_data['answer'] = multiple_choices.answer
 
-        questions_data['type'] = {
-            'multiple_choice_text' : query_short_answer.q_text,
-            'multiple_choice_image' : query_short_answer.q_image,
-            'multiple_choice_audio' : query_short_answer.q_audio,
-            'answer' : query_short_answer.answer
-        }
-        
-        query_answer = Multiple_Choices_Answers_Class.query.filter_by(Multiple_Choices_id=query_short_answer.id)
-        
+        questions_data['answer_choices'] = []
+
         for answer in query_answer:
-            questions_data['type']['answer'] = {
+            answer_choice = {
                 'answer_choice' : answer.choice,
                 'answer_text' : answer.text,
                 'answer_audio' : answer.audio,
                 'answer_image' : answer.image
             }
+            questions_data['answer_choices'].append(answer_choice)
         
     elif query.type == 1:
         query_arrange_sentences= Arrange_sentences.query.filter_by(id=question_id).first()
-        questions_data['type'] = {
-            'arrange_sentences_text' : query_arrange_sentences.q_text,
-            'arrange_sentences_image' : query_arrange_sentences.q_image,
-            'arrange_sentences_audio' : query_arrange_sentences.q_audio,
-            'answer' : query_arrange_sentences.answer
-        }
+        
+        questions_data['question_text'] = query_arrange_sentences.q_text
+        questions_data['question_image'] = query_arrange_sentences.q_image
+        questions_data['question_audio'] = query_arrange_sentences.q_audio
+        questions_data['answer'] = query_arrange_sentences.answer
         
         query_answer = Arrange_Sentences_Answer_Choices_Class.query.filter_by(Arrange_Sentences_id=query_arrange_sentences.id)
         
+        questions_data['answer_words'] = []
+
         for answer in query_answer:
-            questions_data['type']['answer'] = {
-                'word' : answer.word
-            }
+            questions_data['answer_words'].append(answer.word)
 
     else:
         query_short_answer = Short_answers.query.filter_by(id=question_id).first()
-        questions_data['type'] = {
-            'short_answer_type' : query_short_answer.type,
-            'short_answer_text' : query_short_answer.q_text,
-            'short_answer_image' : query_short_answer.q_image,
-            'short_answer_audio' : query_short_answer.q_audio,
-            'answer' : query_short_answer.answer
-        }
         
-    all_questions_data.append(questions_data)
-
-    return jsonify({"questions" : all_questions_data})
-
-
+        questions_data['short_answer_type'] = query_short_answer.type
+        questions_data['question_text'] = query_short_answer.q_text
+        questions_data['question_image'] = query_short_answer.q_image
+        questions_data['question_audio'] = query_short_answer.q_audio
+        questions_data['answer'] = query_short_answer.answer
+        
+    return jsonify({"question" : questions_data})
 
 @app.route('/achievements', methods=['GET'])
 @token_required
