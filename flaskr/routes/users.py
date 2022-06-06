@@ -271,7 +271,7 @@ def get_lesson(current_user, level):
     if not query:
         return jsonify({"msg" : "Lessons not found"})
     
-    lessons_with_same_level = []
+    lessons_data = []
     
     for lessons in query:
         list_lessons = {}
@@ -280,9 +280,9 @@ def get_lesson(current_user, level):
         list_lessons['cover_image'] = lessons.cover_image
         list_lessons['type'] = lessons.type
         
-        lessons_with_same_level.append(list_lessons)
+        lessons_data.append(list_lessons)
     
-    return jsonify({"users" : lessons_with_same_level})
+    return jsonify(lessons_data)
 
 
 @app.route('/lessons/content/<int:id>', methods=['GET'])
@@ -306,7 +306,7 @@ def get_lessons_content(current_user, id):
         
         all_lessons_content.append(lessons_content_data)
     
-    return jsonify({"lesson_contents" : all_lessons_content})
+    return jsonify(all_lessons_content)
 
 
 @app.route('/materials/<int:id>', methods=['GET'])
@@ -325,24 +325,30 @@ def get_materials_content_by_id(current_user, id):
         
         all_materials_content.append(materials_content_data)
     
-    return jsonify({"material_contents" : all_materials_content})
+    return jsonify(all_materials_content)
 
 
 @app.route('/quizzes/<int:id>', methods=['GET'])
 @token_required
 def get_all_questions_by_quizzes_id(current_user, id):
+    quiz = Quizzes.query.filter_by(id=id)
     query = Questions_Class.query.filter_by(Quizzes_id=id)
     
-    all_questions = []
+    quiz_data = {}
+    # quiz_data['is_final'] = quiz.is_final
+    quiz_data['questions'] = []
     
     for questions in query:
         questions_data = {}
         questions_data['order'] = questions.order
         questions_data['type'] = questions.type
+        questions_data['multiple_choices_id'] = questions.Multiple_choices_id
+        questions_data['arrange_words_id'] = questions.Arrange_Sentences_id
+        questions_data['short_answer_id'] = questions.Short_Answers_id
         
-        all_questions.append(questions_data)
+        quiz_data['questions'].append(questions_data)
     
-    return jsonify({"questions" : all_questions})
+    return jsonify(quiz_data)
 
 
 @app.route('/questions/<int:question_id>', methods=['GET'])
@@ -401,7 +407,7 @@ def get_questions_by_question_type(current_user, question_id):
         questions_data['question_audio'] = query_short_answer.q_audio
         questions_data['answer'] = query_short_answer.answer
         
-    return jsonify({"question" : questions_data})
+    return jsonify(questions_data)
 
 @app.route('/achievements', methods=['GET'])
 @token_required
