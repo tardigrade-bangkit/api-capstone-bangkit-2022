@@ -146,8 +146,7 @@ def user_login():
 
     if check_password_hash(selected_user.password, data["password"]):
         token = jwt.encode({
-            'id': selected_user.id,
-            'exp' : datetime.utcnow() + timedelta(minutes = 30)
+            'id': selected_user.id
         }, secret, algorithm="HS256")
         return jsonify({
             'token' : token,
