@@ -263,11 +263,10 @@ def delete_one_children(current_user, children_id, id):
     return jsonify({"msg" : "Children has been deleted"}), 201
 
 
-@app.route('/lessons/level', methods=['GET'])
+@app.route('/lessons/<int:level>', methods=['GET'])
 @token_required
-def get_lesson(current_user):
-    data = request.get_json()
-    query = Lessons.query.filter_by(level=data['level'])
+def get_lesson(current_user, level):
+    query = Lessons.query.filter_by(level=level)
     
     if not query:
         return jsonify({"msg" : "Lessons not found"})
