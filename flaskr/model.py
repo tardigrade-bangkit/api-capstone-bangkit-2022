@@ -72,7 +72,7 @@ class Progress(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     progress = db.Column(db.Integer, nullable=False)
-    finished_date = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
+    finished_date = db.Column(db.DateTime, nullable=True)
     Children_id = db.Column(db.Integer, db.ForeignKey('children.id'))
     Lessons_id = db.Column(db.Integer, db.ForeignKey('lessons.id'))
     

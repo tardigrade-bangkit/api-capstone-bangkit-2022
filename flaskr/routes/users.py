@@ -693,7 +693,7 @@ def get_all_progress_of_children(current_user, child_id):
             'id' : query_lessons[i].lessons.id,
             'title' : query_lessons[i].lessons.title,
             'cover_image' : query_lessons[i].lessons.cover_image,
-            'finished_date' : query_lessons[i].finished_date.strftime("%Y/%m/%d %H:%M:%S"),
+            'finished_date' : query_lessons[i].finished_date.strftime("%Y/%m/%d %H:%M:%S") if query_lessons[i].finished_date else None,
         }
         
         all_lessons.append(data)
