@@ -53,7 +53,7 @@ class Usages(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     time_start = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    time_end = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
+    time_end = db.Column(db.DateTime, nullable=True)
     Children_id = db.Column(db.Integer, db.ForeignKey('children.id'))
     
 class Scores_Association(db.Model):

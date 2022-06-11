@@ -652,8 +652,41 @@ def get_all_usages_of_children(current_user, children_id):
         
     return jsonify({"usages" : all_usages})
 
+@app.route('/usages/<int:children_id>', methods=['POST'])
+@token_required
+def add_usages_start(_, children_id):
+    data = request.get_json()
+    
+    try:
+        new_usages = Usages(time_start=datetime.strptime(data["time_start"], '%d/%m/%Y %H:%M:%S'), Children_id=children_id)
+        db.session.add(new_usages)
+        db.session.commit()
 
+        return jsonify({"msg" : "Usages start added successfully"}), 201
+    except ValueError:
+        return jsonify({"msg" : "Date format is wrong"}), 400
 
+@app.route('/usages/end/<int:children_id>', methods=['POST'])
+@token_required
+def add_usages_end(_, children_id):
+    data = request.get_json()
+    usages = Usages.query.filter_by(Children_id=children_id).order_by(Usages.id.desc()).first()
+
+    if not usages:
+        return jsonify({"msg" : "Usages not exist"})
+
+    try:
+        time_end = datetime.strptime(data["time_end"], '%d/%m/%Y %H:%M:%S')
+
+        if time_end < usages.time_start:
+            return jsonify({"msg" : "Time end is before time start"}), 400
+
+        usages.time_end = datetime.strptime(data["time_end"], '%d/%m/%Y %H:%M:%S')
+        db.session.commit()
+
+        return jsonify({"msg" : "Usages end added successfully"}), 200
+    except ValueError:
+        return jsonify({"msg" : "Date format is wrong"}), 400
 
 @app.route('/questions/multiple_choices/<int:answer_id>', methods=['GET'])
 @token_required
