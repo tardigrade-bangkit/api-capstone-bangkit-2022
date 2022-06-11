@@ -48,19 +48,19 @@ usages9 = Usages(children=children1)
 
 db.session.add_all([usages1, usages2, usages3, usages4, usages5, usages6, usages7, usages8, usages9])
 
-badges1 = Badges(image_url="badgesimagesurl1.com")
-badges2 = Badges(image_url="badgesimagesurl2.com")
-badges3 = Badges(image_url="badgesimagesurl3.com")
-badges4 = Badges(image_url="badgesimagesurl4.com")
-badges5 = Badges(image_url="badgesimagesurl5.com")
-badges6 = Badges(image_url="badgesimagesurl6.com")
+badges1 = Badges(image_url="https://picsum.photos/200")
+badges2 = Badges(image_url="https://picsum.photos/200")
+badges3 = Badges(image_url="https://picsum.photos/200")
+badges4 = Badges(image_url="https://picsum.photos/200")
+badges5 = Badges(image_url="https://picsum.photos/200")
+badges6 = Badges(image_url="https://picsum.photos/200")
 
 db.session.add_all([badges1, badges2, badges3, badges4, badges5, badges6])
 
 
-achievements1 = Achievements(name="achievements 1", image_url="https://iniurlnya.com", description="Ini adalah achievement pertamamu")
-achievements2 = Achievements(name="achievements 2", image_url="https://iniurlnya.com", description="Ini adalah achievement keduamu")
-achievements3 = Achievements(name="achievements 3", image_url="https://iniurlnya.com", description="Ini adalah achievement ketigamu")
+achievements1 = Achievements(name="achievements 1", image_url="https://picsum.photos/200", description="Ini adalah achievement pertamamu")
+achievements2 = Achievements(name="achievements 2", image_url="https://picsum.photos/200", description="Ini adalah achievement keduamu")
+achievements3 = Achievements(name="achievements 3", image_url="https://picsum.photos/200", description="Ini adalah achievement ketigamu")
 
 db.session.add_all([achievements1, achievements2, achievements3])
 
@@ -77,12 +77,12 @@ children_achievement9 = Children_Achievements_Association(achievements=achieveme
 db.session.add_all([children_achievement1, children_achievement2, children_achievement3, children_achievement4, children_achievement5, children_achievement6, children_achievement7, children_achievement8, children_achievement9])
 
 
-lessons1 = Lessons(cover_image="https://cover_image1", level=1, title="Pelajaran 1", type="Reading", badges=badges1)
-lessons2 = Lessons(cover_image="https://cover_image2", level=2, title="Pelajaran 2", type="Writing", badges=badges2)
-lessons3 = Lessons(cover_image="https://cover_image3", level=3, title="Pelajaran 3", type="Speaking", badges=badges3)
-lessons4 = Lessons(cover_image="https://cover_image4", level=4, title="Pelajaran 4", type="Reading", badges=badges4)
-lessons5 = Lessons(cover_image="https://cover_image5", level=5, title="Pelajaran 5", type="Writing", badges=badges5)
-lessons6 = Lessons(cover_image="https://cover_image6", level=6, title="Pelajaran 6", type="Speaking", badges=badges6)
+lessons1 = Lessons(cover_image="https://picsum.photos/200", level=1, title="Pelajaran 1", type="Reading", badges=badges1)
+lessons2 = Lessons(cover_image="https://picsum.photos/200", level=2, title="Pelajaran 2", type="Writing", badges=badges2)
+lessons3 = Lessons(cover_image="https://picsum.photos/200", level=3, title="Pelajaran 3", type="Speaking", badges=badges3)
+lessons4 = Lessons(cover_image="https://picsum.photos/200", level=4, title="Pelajaran 4", type="Reading", badges=badges4)
+lessons5 = Lessons(cover_image="https://picsum.photos/200", level=5, title="Pelajaran 5", type="Writing", badges=badges5)
+lessons6 = Lessons(cover_image="https://picsum.photos/200", level=6, title="Pelajaran 6", type="Speaking", badges=badges6)
 
 db.session.add_all([lessons1, lessons2, lessons3, lessons4, lessons5, lessons6])
 

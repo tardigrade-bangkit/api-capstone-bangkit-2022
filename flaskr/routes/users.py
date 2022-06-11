@@ -427,20 +427,22 @@ def get_all_achievements(current_user):
     return jsonify({"achievements" : all_achievements})
 
 
-@app.route('/achievements/<int:id>', methods=['GET'])
+@app.route('/achievements/<int:child_id>', methods=['GET'])
 @token_required
-def get_all_achievements_of_children(current_user, id):
-    query_achievements = Achievements.query.join(Achievements.children).filter_by(Children_id=id).all() 
+def get_all_achievements_of_children(current_user, child_id):
+    query_achievements = Children_Achievements_Association.query.filter_by(Children_id=child_id).join(Children_Achievements_Association.achievements).all() 
     
     all_achievements = []
     len_data = len(query_achievements)
 
     for i in range(0,len_data):
-        data = {}
-        data['id'] = query_achievements[i].id
-        data['description'] = query_achievements[i].description
-        data['name'] = query_achievements[i].name
-        data['image_url'] = query_achievements[i].image_url
+        data = {
+            'id' : query_achievements[i].achievements.id,
+            'description' : query_achievements[i].achievements.description,
+            'name' : query_achievements[i].achievements.name,
+            'image_url' : query_achievements[i].achievements.image_url,
+            'acquired_date' : query_achievements[i].acquired_date.strftime("%Y/%m/%d %H:%M:%S")
+        }
         
         all_achievements.append(data)
     
@@ -550,18 +552,20 @@ def get_all_badges(current_user):
     
     return jsonify({"badges" : all_badges})
 
-@app.route('/badges/<int:id>', methods=['GET'])
+@app.route('/badges/<int:child_id>', methods=['GET'])
 @token_required
-def get_all_badges_of_children(current_user, id):
-    query_badges = Badges.query.join(Badges.children).filter_by(Children_id=id).all() 
+def get_all_badges_of_children(current_user, child_id):
+    query_badges = Children_Badges_Association.query.filter_by(Children_id=child_id).join(Children_Badges_Association.badges).all() 
     
     all_badges = []
     len_data = len(query_badges)
 
     for i in range(0,len_data):
-        data = {}
-        data['id'] = query_badges[i].id
-        data['image_url'] = query_badges[i].image_url
+        data = {
+            'id' : query_badges[i].badges.id,
+            'image_url' : query_badges[i].badges.image_url,
+            'acquired_date' : query_badges[i].acquired_date.strftime("%Y/%m/%d %H:%M:%S")
+        }
         
         all_badges.append(data)
     
