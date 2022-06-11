@@ -5,7 +5,7 @@ import logging
 from types import MethodDescriptorType
 import uuid ,jwt
 from multiprocessing import AuthenticationError
-from flaskr.model import Achievements, Avatars, Children_Badges_Association, Missions, Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Badges, Children_Achievements_Association, Children_Missions_Association, Lessons, Lessons_Content, Material_Content_Class, Materials, Missions, Multiple_Choices_Answers_Class, Multiple_choices, Questions_Class, Quizzes, Short_answers, Usages, Users, Children, db
+from flaskr.model import Achievements, Avatars, Children_Badges_Association, Missions, Arrange_Sentences_Answer_Choices_Class, Arrange_sentences, Badges, Children_Achievements_Association, Children_Missions_Association, Lessons, Lessons_Content, Material_Content_Class, Materials, Missions, Multiple_Choices_Answers_Class, Multiple_choices, Progress, Questions_Class, Quizzes, Short_answers, Usages, Users, Children, db
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
@@ -612,7 +612,7 @@ def get_all_lessons(current_user):
     
     return jsonify({"lessons" : all_lessons})
 
-@app.route('/lessons/<int:id>', methods=['GET'])
+@app.route('/lessons/children/<int:id>', methods=['GET'])
 @token_required
 def get_all_lessons_of_children(current_user, id):
     query_lessons = Lessons.query.join(Lessons.children).filter_by(Children_id=id).all() 
@@ -680,3 +680,22 @@ def get_all_avatars():
         all_avatars.append(avatars_data)
     
     return jsonify({"avatars" : all_avatars})
+
+@app.route('/progress/<int:child_id>', methods=['GET'])
+@token_required
+def get_all_progress_of_children(current_user, child_id):
+    query_lessons = Progress.query.filter_by(Children_id=child_id).join(Progress.lessons).join(Progress.quizzes, isouter=True).all()
+    
+    all_lessons = []
+
+    for i in range(0,len(query_lessons)):
+        data = {
+            'id' : query_lessons[i].lessons.id,
+            'title' : query_lessons[i].lessons.title,
+            'cover_image' : query_lessons[i].lessons.cover_image,
+            'finished_date' : query_lessons[i].finished_date.strftime("%Y/%m/%d %H:%M:%S"),
+        }
+        
+        all_lessons.append(data)
+    
+    return jsonify({"lessons" : all_lessons})
