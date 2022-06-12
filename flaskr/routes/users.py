@@ -9,6 +9,7 @@ from flaskr.model import Achievements, Avatars, Children_Badges_Association, Mis
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
+# from flaskr.model import main
 # import h5py
 
 
@@ -399,7 +400,7 @@ def get_questions_by_question_type(current_user, question_id):
         for answer in query_answer:
             questions_data['answer_words'].append(answer.word)
 
-    else:
+    elif query.type == 2:
         query_short_answer = Short_answers.query.filter_by(id=query.Short_Answers_id).first()
         
         questions_data['short_answer_type'] = query_short_answer.type
@@ -407,7 +408,9 @@ def get_questions_by_question_type(current_user, question_id):
         questions_data['question_image'] = query_short_answer.q_image
         questions_data['question_audio'] = query_short_answer.q_audio
         questions_data['answer'] = query_short_answer.answer
-        
+    
+    else :
+        return jsonify({"msg", "type invalid"}), 400
     return jsonify(questions_data)
 
 @app.route('/achievements', methods=['GET'])
@@ -691,6 +694,7 @@ def add_usages_end(_, children_id):
 
 @app.route('/questions/multiple_choices/<int:answer_id>', methods=['GET'])
 @token_required
+
 def get_short_answer(current_user, answer_id):
     pass
 
@@ -737,3 +741,75 @@ def get_all_progress_of_children(current_user, child_id):
         all_lessons.append(data)
     
     return jsonify({"lessons" : all_lessons})
+
+
+@app.route('/progress/<int:child_id>', methods=['POST'])
+@token_required
+def update_progress(current_user, child_id):
+    data = request.get_json()
+    selected_progress = Progress.query.filter_by(Children_id=child_id, Lessons_id=data['Lessons_id']).first()
+    selected_lessons_content = Lessons_Content.query.filter_by(Lessons_id=data['Lessons_id']).all()
+
+    if not selected_progress:
+        return jsonify({"msg" : "progess doesn't exist"})
+    
+    max_order = 0
+    for i in range(0,len(selected_lessons_content)):
+        if max_order < selected_lessons_content[i].order:
+            max_order = selected_lessons_content[i].order
+            
+    if data['progress'] <= max_order and data['progress'] > selected_progress.progress:
+        selected_progress.progress = data['progress']
+        if data['progress'] == max_order:
+            selected_progress.finished_date = datetime.utcnow()
+    else : 
+        return jsonify({"msg" : "progress invalid"}), 400
+    
+    db.session.commit()
+    return jsonify({"msg" : "progress updated successfully"})
+
+
+@app.route('/quiz', methods=['POST'])
+@token_required
+def answer(current_user):
+    data = request.get_json()
+
+    correct_answer = 0
+    
+    for i in range(0,len(data["list_answer"])):
+        selected_questions = Questions_Class.query.filter_by(id=data["list_answer"][i]["question_id"]).first()
+        if selected_questions.type == 0 :
+            get_id = selected_questions.Multiple_choices_id
+            selected_answer = Multiple_choices.query.filter_by(id=get_id).first()
+            if (data["list_answer"][i]["answer"] == selected_answer.answer):
+                correct_answer += 1
+            else :
+                pass
+        elif selected_questions.type == 1 :
+            get_id = selected_questions.Multiple_choices_id
+            selected_answer = Arrange_sentences.query.filter_by(id=get_id).first()
+            if (data["list_answer"][i]["answer"] == selected_answer.answer):
+                correct_answer += 1
+            else :
+                pass
+        elif selected_questions.type == 2 :
+            get_id = selected_questions.Multiple_choices_id
+            selected_answer = Short_answers.query.filter_by(id=get_id).first()
+            if (data["list_answer"][i]["answer"] == selected_answer.answer):
+                correct_answer += 1
+            else :
+                pass
+        else : 
+            return jsonify({"msg", "invalid type"}), 400
+    
+    if correct_answer <= 2 :
+        return jsonify({"msg" , "level 1"})
+    elif correct_answer <= 4 :
+        return jsonify({"msg" , "level 2"})
+    elif correct_answer <= 6 :
+        return jsonify({"msg" , "level 3"})
+    elif correct_answer <= 8 :
+        return jsonify({"msg" , "level 4"})
+    else: 
+        return jsonify({"msg", "level 5"})
+    
