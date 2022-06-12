@@ -162,7 +162,7 @@ class Lessons(db.Model):
     level = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String(length=100), unique=False, nullable=False)
     type = db.Column(db.String(length=100), nullable=False)
-    Badges_id = db.Column(db.Integer, db.ForeignKey('badges.id'), nullable=False) # one to one
+    Badges_id = db.Column(db.Integer, db.ForeignKey('badges.id'), nullable=True) # one to one
     
     children = db.relationship('Progress', back_populates="lessons") # many to many
     missions = db.relationship('Missions', backref='lessons', lazy=True)
