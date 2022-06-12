@@ -755,11 +755,12 @@ def update_progress(current_user, child_id):
         if max_order < selected_lessons_content[i].order:
             max_order = selected_lessons_content[i].order
             
-    if data['progress'] <= max_order:
+    if data['progress'] <= max_order and data['progress'] > selected_progress.progress:
         selected_progress.progress = data['progress']
-    
-    if data['progress'] == max_order:
-        selected_progress.finished_date = datetime.utcnow()
+        if data['progress'] == max_order:
+            selected_progress.finished_date = datetime.utcnow()
+    else : 
+        return jsonify({"msg" : "progress invalid"}), 400
     
     db.session.commit()
     return jsonify({"msg" : "progress updated successfully"})
