@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from functools import wraps
-import json
+import base64
 import logging
 from types import MethodDescriptorType
 import uuid
@@ -819,6 +819,15 @@ def update_progress(current_user, child_id):
     return jsonify({"msg": "progress updated successfully"})
 
 
+# ANSWER
+
+def isBase64(ans):
+    try:
+        return base64.b64encode(base64.b64decode(ans)) == ans
+    except Exception:
+        return False
+
+
 @app.route('/quiz', methods=['POST'])
 @token_required
 def answer(current_user):
@@ -850,13 +859,17 @@ def answer(current_user):
             get_id = selected_questions.Short_Answers_id
             selected_answer = Short_answers.query.filter_by(id=get_id).first()
 
-            if (answer["answer"] == selected_answer.answer):
-                correct_answer += 1
-                
+            if selected_answer.type == "audio":
+                pass
+            elif selected_answer.type == "image":
+                pass
+            elif selected_answer.type == "text":
+                if (data["list_answer"][i]["answer"] == selected_answer.answer):
+                    correct_answer += 1
+
         else:
             return jsonify({"msg", "invalid type"}), 400
 
-    # for now, only return level 1
     return jsonify({
         "correct_answer": correct_answer,
         "level": 1
