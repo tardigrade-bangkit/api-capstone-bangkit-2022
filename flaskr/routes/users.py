@@ -288,7 +288,7 @@ def get_lesson(current_user, level):
 @app.route('/lessons/content/<int:id>', methods=['GET'])
 @token_required
 def get_lessons_content(current_user, id):
-    selected_lessons = Lessons_Content.query.filter_by(Lessons_id=id)
+    selected_lessons = Lessons_Content.query.filter_by(Lessons_id=id).order_by(Lessons_Content.order.asc())
     
     if not selected_lessons:
         return jsonify({"msg" : "Lessons not found"}), 401
@@ -312,7 +312,7 @@ def get_lessons_content(current_user, id):
 @app.route('/materials/<int:id>', methods=['GET'])
 @token_required
 def get_materials_content_by_id(current_user, id):
-    query = Material_Content_Class.query.filter_by(Materials_id=id)
+    query = Material_Content_Class.query.filter_by(Materials_id=id).order_by(Material_Content_Class.order.asc())
     
     all_materials_content = []
     
@@ -332,7 +332,7 @@ def get_materials_content_by_id(current_user, id):
 @token_required
 def get_all_questions_by_quizzes_id(current_user, id):
     quiz = Quizzes.query.filter_by(id=id)
-    query = Questions_Class.query.filter_by(Quizzes_id=id)
+    query = Questions_Class.query.filter_by(Quizzes_id=id).order_by(Questions_Class.order.asc())
     
     quiz_data = {}
     # quiz_data['is_final'] = quiz.is_final
