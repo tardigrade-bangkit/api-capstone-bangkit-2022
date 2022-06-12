@@ -9,6 +9,7 @@ from flaskr.model import Achievements, Avatars, Children_Badges_Association, Mis
 from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
+# from flaskr.model import main
 # import h5py
 
 
@@ -690,6 +691,7 @@ def add_usages_end(_, children_id):
 
 @app.route('/questions/multiple_choices/<int:answer_id>', methods=['GET'])
 @token_required
+
 def get_short_answer(current_user, answer_id):
     pass
 
@@ -736,3 +738,28 @@ def get_all_progress_of_children(current_user, child_id):
         all_lessons.append(data)
     
     return jsonify({"lessons" : all_lessons})
+
+
+@app.route('/progress/<int:child_id>', methods=['POST'])
+@token_required
+def update_progress(current_user, child_id):
+    data = request.get_json()
+    selected_progress = Progress.query.filter_by(Children_id=child_id, Lessons_id=data['Lessons_id']).first()
+    selected_lessons_content = Lessons_Content.query.filter_by(Lessons_id=data['Lessons_id']).all()
+
+    if not selected_progress:
+        return jsonify({"msg" : "progess doesn't exist"})
+    
+    max_order = 0
+    for i in range(0,len(selected_lessons_content)):
+        if max_order < selected_lessons_content[i].order:
+            max_order = selected_lessons_content[i].order
+            
+    if data['progress'] <= max_order:
+        selected_progress.progress = data['progress']
+    
+    if data['progress'] == max_order:
+        selected_progress.finished_date = datetime.utcnow()
+    
+    db.session.commit()
+    return jsonify({"msg" : "progress updated successfully"})
