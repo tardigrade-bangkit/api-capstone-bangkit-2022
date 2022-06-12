@@ -345,6 +345,7 @@ def get_all_questions_by_quizzes_id(current_user, id):
         questions_data['multiple_choices_id'] = questions.Multiple_choices_id
         questions_data['arrange_words_id'] = questions.Arrange_Sentences_id
         questions_data['short_answer_id'] = questions.Short_Answers_id
+        questions_data['id'] = questions.id
         
         quiz_data['questions'].append(questions_data)
     
@@ -364,7 +365,7 @@ def get_questions_by_question_type(current_user, question_id):
     questions_data['type'] = query.type
     
     if query.type == 0:
-        multiple_choices = Multiple_choices.query.filter_by(id=question_id).first()
+        multiple_choices = Multiple_choices.query.filter_by(id=query.Multiple_choices_id).first()
         
         query_answer = Multiple_Choices_Answers_Class.query.filter_by(Multiple_Choices_id=multiple_choices.id)
         questions_data['question_text'] = multiple_choices.q_text
@@ -384,7 +385,7 @@ def get_questions_by_question_type(current_user, question_id):
             questions_data['answer_choices'].append(answer_choice)
         
     elif query.type == 1:
-        query_arrange_sentences= Arrange_sentences.query.filter_by(id=question_id).first()
+        query_arrange_sentences= Arrange_sentences.query.filter_by(id=query.Arrange_Sentences_id).first()
         
         questions_data['question_text'] = query_arrange_sentences.q_text
         questions_data['question_image'] = query_arrange_sentences.q_image
@@ -399,7 +400,7 @@ def get_questions_by_question_type(current_user, question_id):
             questions_data['answer_words'].append(answer.word)
 
     else:
-        query_short_answer = Short_answers.query.filter_by(id=question_id).first()
+        query_short_answer = Short_answers.query.filter_by(id=query.Short_Answers_id).first()
         
         questions_data['short_answer_type'] = query_short_answer.type
         questions_data['question_text'] = query_short_answer.q_text
