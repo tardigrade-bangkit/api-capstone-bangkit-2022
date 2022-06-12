@@ -864,7 +864,7 @@ def answer(current_user):
             elif selected_answer.type == "image":
                 pass
             elif selected_answer.type == "text":
-                if (data["list_answer"][i]["answer"] == selected_answer.answer):
+                if (answer["answer"] == selected_answer.answer):
                     correct_answer += 1
 
         else:
@@ -872,5 +872,5 @@ def answer(current_user):
 
     return jsonify({
         "correct_answer": correct_answer,
-        "level": 1
+        "score": round((correct_answer / len(data["list_answer"])) * 100, 2)
     })
