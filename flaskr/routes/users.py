@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from functools import wraps
-import json
+import base64
 import logging
 from types import MethodDescriptorType
 import uuid ,jwt
@@ -769,6 +769,16 @@ def update_progress(current_user, child_id):
     return jsonify({"msg" : "progress updated successfully"})
 
 
+
+## ANSWER
+
+def isBase64(ans):
+    try:
+        return base64.b64encode(base64.b64decode(ans)) == ans
+    except Exception:
+        return False
+
+
 @app.route('/quiz', methods=['POST'])
 @token_required
 def answer(current_user):
@@ -786,21 +796,25 @@ def answer(current_user):
             else :
                 pass
         elif selected_questions.type == 1 :
-            get_id = selected_questions.Multiple_choices_id
+            get_id = selected_questions.Arrange_Sentences_id
             selected_answer = Arrange_sentences.query.filter_by(id=get_id).first()
             if (data["list_answer"][i]["answer"] == selected_answer.answer):
                 correct_answer += 1
             else :
                 pass
         elif selected_questions.type == 2 :
-            get_id = selected_questions.Multiple_choices_id
+            get_id = selected_questions.Short_Answers_id
             selected_answer = Short_answers.query.filter_by(id=get_id).first()
-            if (data["list_answer"][i]["answer"] == selected_answer.answer):
-                correct_answer += 1
-            else :
+            if selected_answer.type == "audio":
                 pass
-        else : 
-            return jsonify({"msg", "invalid type"}), 400
+            elif selected_answer.type == "image":
+                pass
+            elif selected_answer.type == "text":
+                if (data["list_answer"][i]["answer"] == selected_answer.answer):
+                    correct_answer += 1
+                pass
+            else : 
+                return jsonify({"msg", "invalid type"}), 400
     
     if correct_answer <= 2 :
         return jsonify({"msg" , "level 1"})
