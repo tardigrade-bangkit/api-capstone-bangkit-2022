@@ -282,7 +282,7 @@ def get_lesson(current_user, level):
         
         lessons_data.append(list_lessons)
     
-    return jsonify(lessons_data)
+    return jsonify({"lessons": lessons_data})
 
 
 @app.route('/lessons/content/<int:id>', methods=['GET'])
@@ -306,7 +306,7 @@ def get_lessons_content(current_user, id):
         
         all_lessons_content.append(lessons_content_data)
     
-    return jsonify(all_lessons_content)
+    return jsonify({"lesson_contents": all_lessons_content})
 
 
 @app.route('/materials/<int:id>', methods=['GET'])
