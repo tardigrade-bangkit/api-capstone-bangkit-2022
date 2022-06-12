@@ -646,8 +646,8 @@ def get_all_usages_of_children(current_user, children_id):
     for i in range(0,len(query)):
         data = {}
         data['id'] = query[i].id
-        data['time_start'] = query[i].time_start
-        data['time_end'] = query[i].time_end
+        data['time_start'] = query[i].time_start.strftime("%Y/%m/%d %H:%M:%S")
+        data['time_end'] = query[i].time_end.strftime("%Y/%m/%d %H:%M:%S") if query[i].time_end else None
         all_usages.append(data)
         
     return jsonify({"usages" : all_usages})
