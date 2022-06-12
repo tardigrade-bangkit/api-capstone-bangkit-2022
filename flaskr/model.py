@@ -162,7 +162,7 @@ class Lessons(db.Model):
     level = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String(length=100), unique=False, nullable=False)
     type = db.Column(db.String(length=100), nullable=False)
-    Badges_id = db.Column(db.Integer, db.ForeignKey('badges.id')) # one to one
+    Badges_id = db.Column(db.Integer, db.ForeignKey('badges.id'), nullable=False) # one to one
     
     children = db.relationship('Progress', back_populates="lessons") # many to many
     missions = db.relationship('Missions', backref='lessons', lazy=True)
@@ -221,9 +221,9 @@ class Questions_Class(db.Model):
 class Multiple_choices(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    q_text = db.Column(db.String(length=255), nullable=False)
-    q_audio = db.Column(db.String(length=255), nullable=False)
-    q_image = db.Column(db.String(length=255), nullable=False)
+    q_text = db.Column(db.String(length=255), nullable=True)
+    q_audio = db.Column(db.String(length=255), nullable=True)
+    q_image = db.Column(db.String(length=255), nullable=True)
     answer = db.Column(db.String(length=1), nullable=False)
     questions = db.relationship('Questions_Class', backref="multiple_choices", uselist=False) # one to one
     multiple_choices_answer = db.relationship('Multiple_Choices_Answers_Class', backref="multiple_choices", lazy=True)
@@ -263,9 +263,9 @@ class Short_answers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(length=255), nullable=False)
     answer = db.Column(db.String(length=255), nullable=False)
-    q_text = db.Column(db.String(length=255), nullable=False)
-    q_audio = db.Column(db.String(length=255), nullable=False)
-    q_image = db.Column(db.String(length=255), nullable=False)
+    q_text = db.Column(db.String(length=255), nullable=True)
+    q_audio = db.Column(db.String(length=255), nullable=True)
+    q_image = db.Column(db.String(length=255), nullable=True)
     questions = db.relationship('Questions_Class', backref="short_answers", uselist=False) # one to one
 
     
