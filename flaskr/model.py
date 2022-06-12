@@ -232,11 +232,12 @@ class Multiple_choices(db.Model):
 class Multiple_Choices_Answers_Class(db.Model):
     __tablename__ = 'Multiple_Choices_Answers'
     __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
     choice = db.Column(db.String(length=1), nullable=False)
     text = db.Column(db.Integer, nullable=True)
     audio = db.Column(db.Integer, nullable=True)
     image = db.Column(db.Integer, nullable=True)
-    Multiple_Choices_id = db.Column(db.Integer, db.ForeignKey('multiple_choices.id'), primary_key=True)
+    Multiple_Choices_id = db.Column(db.Integer, db.ForeignKey('multiple_choices.id'))
     
 class Arrange_sentences(db.Model):
     __table_args__ = {'extend_existing': True}
