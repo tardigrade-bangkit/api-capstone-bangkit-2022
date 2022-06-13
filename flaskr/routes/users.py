@@ -208,7 +208,15 @@ def add_children(current_user):
     db.session.add(new_children)
     db.session.commit()
 
-    return jsonify({"msg": "Created children successfully"}), 201
+    return jsonify({
+        "new_child": {
+            'id': new_children.id,
+            'name': new_children.name,
+            'level': new_children.level,
+            'avatar': new_children.avatar_children.image_url,
+            'birthdate': new_children.tgl_lahir
+        }
+    }), 201
 
 
 @app.route('/children', methods=['GET'])
