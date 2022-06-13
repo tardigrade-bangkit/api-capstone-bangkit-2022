@@ -6,16 +6,16 @@ db.drop_all()
 db.create_all()
 # Multiple_choices_answers, Arrange_sentences_answer_choices
 
-avatar1 = Avatars(image_url="https://storage.cloud.google.com/tardigrade-bucket/avatar-img/avatarF1.jpg") 
-avatar2 = Avatars(image_url="https://storage.cloud.google.com/tardigrade-bucket/avatar-img/avatarF2.jpg") 
-avatar3 = Avatars(image_url="https://storage.cloud.google.com/tardigrade-bucket/avatar-img/avatarF3.jpg") 
-avatar4 = Avatars(image_url="https://storage.cloud.google.com/tardigrade-bucket/avatar-img/avatarF4.jpg") 
-avatar5 = Avatars(image_url="https://storage.cloud.google.com/tardigrade-bucket/avatar-img/avatarF5.jpg") 
-avatar6 = Avatars(image_url="https://storage.cloud.google.com/tardigrade-bucket/avatar-img/avatarM1.jpg") 
-avatar7 = Avatars(image_url="https://storage.cloud.google.com/tardigrade-bucket/avatar-img/avatarM2.jpg") 
-avatar8 = Avatars(image_url="https://storage.cloud.google.com/tardigrade-bucket/avatar-img/avatarM3.jpg") 
-avatar9 = Avatars(image_url="https://storage.cloud.google.com/tardigrade-bucket/avatar-img/avatarM4.jpg") 
-avatar10 = Avatars(image_url="https://storage.cloud.google.com/tardigrade-bucket/avatar-img/avatarM5.jpg") 
+avatar1 = Avatars(image_url="https://storage.googleapis.com/tardigrade-bucket/avatar-img/avatarF1.jpg") 
+avatar2 = Avatars(image_url="https://storage.googleapis.com/tardigrade-bucket/avatar-img/avatarF2.jpg") 
+avatar3 = Avatars(image_url="https://storage.googleapis.com/tardigrade-bucket/avatar-img/avatarF3.jpg") 
+avatar4 = Avatars(image_url="https://storage.googleapis.com/tardigrade-bucket/avatar-img/avatarF4.jpg") 
+avatar5 = Avatars(image_url="https://storage.googleapis.com/tardigrade-bucket/avatar-img/avatarF5.jpg") 
+avatar6 = Avatars(image_url="https://storage.googleapis.com/tardigrade-bucket/avatar-img/avatarM1.jpg") 
+avatar7 = Avatars(image_url="https://storage.googleapis.com/tardigrade-bucket/avatar-img/avatarM2.jpg") 
+avatar8 = Avatars(image_url="https://storage.googleapis.com/tardigrade-bucket/avatar-img/avatarM3.jpg") 
+avatar9 = Avatars(image_url="https://storage.googleapis.com/tardigrade-bucket/avatar-img/avatarM4.jpg") 
+avatar10 = Avatars(image_url="https://storage.googleapis.com/tardigrade-bucket/avatar-img/avatarM5.jpg") 
 
 db.session.add_all([avatar1,avatar2,avatar3,avatar4,avatar5,avatar6,avatar7,avatar8,avatar9,avatar10])
 
@@ -55,22 +55,22 @@ usages9 = Usages(children=children1)
 
 db.session.add_all([usages1, usages2, usages3, usages4, usages5, usages6, usages7, usages8, usages9])
 
-badges0 = Badges(image_url="https://storage.cloud.google.com/tardigrade-bucket/badge-img/placement-test.png")
-badges1 = Badges(image_url="https://storage.cloud.google.com/tardigrade-bucket/badge-img/alphabets.png")
-badges2 = Badges(image_url="https://storage.cloud.google.com/tardigrade-bucket/badge-img/animals.png")
-badges3 = Badges(image_url="https://storage.cloud.google.com/tardigrade-bucket/badge-img/family.png")
-badges4 = Badges(image_url="https://storage.cloud.google.com/tardigrade-bucket/badge-img/colors.png")
-badges5 = Badges(image_url="https://storage.cloud.google.com/tardigrade-bucket/badge-img/body-parts.png")
-badges6 = Badges(image_url="https://storage.cloud.google.com/tardigrade-bucket/badge-img/greetings.png")
-badges7 = Badges(image_url="https://storage.cloud.google.com/tardigrade-bucket/badge-img/intro-self.png")
-badges8 = Badges(image_url="https://storage.cloud.google.com/tardigrade-bucket/badge-img/intro-others.png")
+badges0 = Badges(image_url="https://storage.googleapis.com/tardigrade-bucket/badge-img/placement-test.png")
+badges1 = Badges(image_url="https://storage.googleapis.com/tardigrade-bucket/badge-img/alphabets.png")
+badges2 = Badges(image_url="https://storage.googleapis.com/tardigrade-bucket/badge-img/animals.png")
+badges3 = Badges(image_url="https://storage.googleapis.com/tardigrade-bucket/badge-img/family.png")
+badges4 = Badges(image_url="https://storage.googleapis.com/tardigrade-bucket/badge-img/colors.png")
+badges5 = Badges(image_url="https://storage.googleapis.com/tardigrade-bucket/badge-img/body-parts.png")
+badges6 = Badges(image_url="https://storage.googleapis.com/tardigrade-bucket/badge-img/greetings.png")
+badges7 = Badges(image_url="https://storage.googleapis.com/tardigrade-bucket/badge-img/intro-self.png")
+badges8 = Badges(image_url="https://storage.googleapis.com/tardigrade-bucket/badge-img/intro-others.png")
 
 db.session.add_all([badges0, badges1, badges2, badges3, badges4, badges5, badges6, badges7, badges8])
 
 
-achievements1 = Achievements(name="achievements 1", image_url="https://storage.cloud.google.com/tardigrade-bucket/achievement-img/a1.png", description="Ini adalah achievement pertamamu")
-achievements2 = Achievements(name="achievements 2", image_url="https://storage.cloud.google.com/tardigrade-bucket/achievement-img/a2.png", description="Ini adalah achievement keduamu")
-achievements3 = Achievements(name="achievements 3", image_url="https://storage.cloud.google.com/tardigrade-bucket/achievement-img/a3.png", description="Ini adalah achievement ketigamu")
+achievements1 = Achievements(name="achievements 1", image_url="https://storage.googleapis.com/tardigrade-bucket/achievement-img/a1.png", description="Ini adalah achievement pertamamu")
+achievements2 = Achievements(name="achievements 2", image_url="https://storage.googleapis.com/tardigrade-bucket/achievement-img/a2.png", description="Ini adalah achievement keduamu")
+achievements3 = Achievements(name="achievements 3", image_url="https://storage.googleapis.com/tardigrade-bucket/achievement-img/a3.png", description="Ini adalah achievement ketigamu")
 
 db.session.add_all([achievements1, achievements2, achievements3])
 
@@ -86,15 +86,15 @@ children_achievement9 = Children_Achievements_Association(achievements=achieveme
 
 db.session.add_all([children_achievement1, children_achievement2, children_achievement3, children_achievement4, children_achievement5, children_achievement6, children_achievement7, children_achievement8, children_achievement9])
 
-lessons0 = Lessons(cover_image="https://storage.cloud.google.com/tardigrade-bucket/cover-img/placement-test.png", level=0, title="Placement Test", type="Placement Test", badges=badges0)
-lessons1 = Lessons(cover_image="https://storage.cloud.google.com/tardigrade-bucket/cover-img/vocabulary/alphabets.png", level=1, title="Alphabets", type="Vocabulary", badges=badges1)
-lessons2 = Lessons(cover_image="https://storage.cloud.google.com/tardigrade-bucket/cover-img/vocabulary/animals.png", level=1, title="Animals", type="Vocabulary", badges=badges2)
-lessons3 = Lessons(cover_image="https://storage.cloud.google.com/tardigrade-bucket/cover-img/vocabulary/family.png", level=1, title="Family", type="Vocabulary", badges=badges3)
-lessons4 = Lessons(cover_image="https://storage.cloud.google.com/tardigrade-bucket/cover-img/vocabulary/colors.png", level=1, title="Colors", type="Vocabulary", badges=badges4)
-lessons5 = Lessons(cover_image="https://storage.cloud.google.com/tardigrade-bucket/cover-img/vocabulary/body-parts.png", level=1, title="Body Parts", type="Vocabulary", badges=badges5)
-lessons6 = Lessons(cover_image="https://storage.cloud.google.com/tardigrade-bucket/cover-img/grammar/intro-self.png", level=1, title="Self Introduction", type="Grammar", badges=badges6)
-lessons7 = Lessons(cover_image="https://storage.cloud.google.com/tardigrade-bucket/cover-img/grammar/intro-others.png", level=1, title="Introducing Others", type="Grammar", badges=badges7)
-lessons8 = Lessons(cover_image="https://storage.cloud.google.com/tardigrade-bucket/cover-img/grammar/greetings.png", level=1, title="Greetings", type="Grammar", badges=badges8)
+lessons0 = Lessons(cover_image="https://storage.googleapis.com/tardigrade-bucket/cover-img/placement-test.png", level=0, title="Placement Test", type="Placement Test", badges=badges0)
+lessons1 = Lessons(cover_image="https://storage.googleapis.com/tardigrade-bucket/cover-img/vocabulary/alphabets.png", level=1, title="Alphabets", type="Vocabulary", badges=badges1)
+lessons2 = Lessons(cover_image="https://storage.googleapis.com/tardigrade-bucket/cover-img/vocabulary/animals.png", level=1, title="Animals", type="Vocabulary", badges=badges2)
+lessons3 = Lessons(cover_image="https://storage.googleapis.com/tardigrade-bucket/cover-img/vocabulary/family.png", level=1, title="Family", type="Vocabulary", badges=badges3)
+lessons4 = Lessons(cover_image="https://storage.googleapis.com/tardigrade-bucket/cover-img/vocabulary/colors.png", level=1, title="Colors", type="Vocabulary", badges=badges4)
+lessons5 = Lessons(cover_image="https://storage.googleapis.com/tardigrade-bucket/cover-img/vocabulary/body-parts.png", level=1, title="Body Parts", type="Vocabulary", badges=badges5)
+lessons6 = Lessons(cover_image="https://storage.googleapis.com/tardigrade-bucket/cover-img/grammar/intro-self.png", level=1, title="Self Introduction", type="Grammar", badges=badges6)
+lessons7 = Lessons(cover_image="https://storage.googleapis.com/tardigrade-bucket/cover-img/grammar/intro-others.png", level=1, title="Introducing Others", type="Grammar", badges=badges7)
+lessons8 = Lessons(cover_image="https://storage.googleapis.com/tardigrade-bucket/cover-img/grammar/greetings.png", level=1, title="Greetings", type="Grammar", badges=badges8)
 
 db.session.add_all([lessons0, lessons1, lessons2, lessons3, lessons4, lessons5, lessons6, lessons7, lessons8])
 
@@ -180,9 +180,9 @@ db.session.add_all([multiple_choices01, multiple_choices02, multiple_choices03, 
 # QUIZZES multiple choices
 multiple_choices1 = Multiple_choices(q_text="Kata apa yang berawalan huruf a?", answer="C")
 multiple_choices2 = Multiple_choices(q_text="Which one says “frog”?", answer="A")
-multiple_choices3 = Multiple_choices(q_text="Which family member did you hear?", q_audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/family/mother.wav", answer="A")
-multiple_choices4 = Multiple_choices(q_text="What color did you hear?", q_audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/colors/red.wav", answer="C")
-multiple_choices5 = Multiple_choices(q_text="What part of the body did you hear?", q_audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/body-parts/hand.wav", answer="D")
+multiple_choices3 = Multiple_choices(q_text="Which family member did you hear?", q_audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/family/mother.wav", answer="A")
+multiple_choices4 = Multiple_choices(q_text="What color did you hear?", q_audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/colors/red.wav", answer="C")
+multiple_choices5 = Multiple_choices(q_text="What part of the body did you hear?", q_audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/body-parts/hand.wav", answer="D")
 
 db.session.add_all([multiple_choices1, multiple_choices2, multiple_choices3, multiple_choices4, multiple_choices5])
 
@@ -245,36 +245,36 @@ db.session.add_all([lessons_content6, lessons_content7, lessons_content8, lesson
 
 
 # ALPHABETS
-material_content1 = Material_Content_Class(order=1, text="A for apple", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/alphabets/a-apple.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/alphabets/a-apple.wav", materials=materials1)
-material_content2 = Material_Content_Class(order=2, text="B for boat", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/alphabets/b-boat.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/alphabets/b-boat.wav", materials=materials1)
-material_content3 = Material_Content_Class(order=3, text="C for car", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/alphabets/c-car.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/alphabets/c-car.wav", materials=materials1)
-material_content4 = Material_Content_Class(order=4, text="D for dog", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/alphabets/d-dog.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/alphabets/d-dog.wav", materials=materials1)
-material_content5 = Material_Content_Class(order=5, text="E for elephant", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/alphabets/e-elephant.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/alphabets/e-elephant.wav", materials=materials1)
+material_content1 = Material_Content_Class(order=1, text="A for apple", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/alphabets/a-apple.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/alphabets/a-apple.wav", materials=materials1)
+material_content2 = Material_Content_Class(order=2, text="B for boat", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/alphabets/b-boat.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/alphabets/b-boat.wav", materials=materials1)
+material_content3 = Material_Content_Class(order=3, text="C for car", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/alphabets/c-car.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/alphabets/c-car.wav", materials=materials1)
+material_content4 = Material_Content_Class(order=4, text="D for dog", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/alphabets/d-dog.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/alphabets/d-dog.wav", materials=materials1)
+material_content5 = Material_Content_Class(order=5, text="E for elephant", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/alphabets/e-elephant.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/alphabets/e-elephant.wav", materials=materials1)
 
 # ANIMALS
-material_content6 = Material_Content_Class(order=1, text="Ant", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/animals/ant.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/animals/ant.wav", materials=materials2)
-material_content7 = Material_Content_Class(order=2, text="Butterfly", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/animals/butterfly.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/animals/butterfly.wav", materials=materials2)
-material_content8 = Material_Content_Class(order=3, text="Frog", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/animals/frog.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/animals/frog.wav", materials=materials2)
-material_content9 = Material_Content_Class(order=4, text="Mouse", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/animals/mouse.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/animals/mouse.wav", materials=materials2)
-material_content10 = Material_Content_Class(order=5, text="Rabbit", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/animals/rabbit.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/animals/rabbit.wav", materials=materials2)
+material_content6 = Material_Content_Class(order=1, text="Ant", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/animals/ant.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/animals/ant.wav", materials=materials2)
+material_content7 = Material_Content_Class(order=2, text="Butterfly", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/animals/butterfly.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/animals/butterfly.wav", materials=materials2)
+material_content8 = Material_Content_Class(order=3, text="Frog", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/animals/frog.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/animals/frog.wav", materials=materials2)
+material_content9 = Material_Content_Class(order=4, text="Mouse", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/animals/mouse.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/animals/mouse.wav", materials=materials2)
+material_content10 = Material_Content_Class(order=5, text="Rabbit", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/animals/rabbit.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/animals/rabbit.wav", materials=materials2)
 
 # FAMILY
-material_content11 = Material_Content_Class(order=1, text="Father", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/family/father.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/family/father.wav", materials=materials3)
-material_content12 = Material_Content_Class(order=2, text="Mother", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/family/mother.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/family/mother.wav", materials=materials3)
+material_content11 = Material_Content_Class(order=1, text="Father", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/family/father.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/family/father.wav", materials=materials3)
+material_content12 = Material_Content_Class(order=2, text="Mother", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/family/mother.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/family/mother.wav", materials=materials3)
 
 # COLORS
-material_content13 = Material_Content_Class(order=1, text="Red", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/colors/red.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/colors/red.wav", materials=materials4)
-material_content14 = Material_Content_Class(order=2, text="Yellow", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/colors/yellow.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/colors/yellow.wav", materials=materials4)
-material_content15 = Material_Content_Class(order=3, text="Blue", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/colors/blue.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/colors/blue.wav", materials=materials4)
-material_content16 = Material_Content_Class(order=4, text="Orange", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/colors/orange.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/colors/orange.wav", materials=materials4)
-material_content17 = Material_Content_Class(order=5, text="Green", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/colors/green.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/colors/green.wav", materials=materials4)
-material_content18 = Material_Content_Class(order=6, text="Purple", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/colors/purple.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/colors/purple.wav", materials=materials4)
+material_content13 = Material_Content_Class(order=1, text="Red", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/colors/red.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/colors/red.wav", materials=materials4)
+material_content14 = Material_Content_Class(order=2, text="Yellow", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/colors/yellow.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/colors/yellow.wav", materials=materials4)
+material_content15 = Material_Content_Class(order=3, text="Blue", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/colors/blue.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/colors/blue.wav", materials=materials4)
+material_content16 = Material_Content_Class(order=4, text="Orange", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/colors/orange.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/colors/orange.wav", materials=materials4)
+material_content17 = Material_Content_Class(order=5, text="Green", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/colors/green.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/colors/green.wav", materials=materials4)
+material_content18 = Material_Content_Class(order=6, text="Purple", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/colors/purple.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/colors/purple.wav", materials=materials4)
 
 # PART OF BODY
-material_content19 = Material_Content_Class(order=1, text="Head", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/body-parts/head.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/body-parts/head.wav", materials=materials5)
-material_content20 = Material_Content_Class(order=2, text="Hand", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/body-parts/hand.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/body-parts/hand.wav", materials=materials5)
-material_content21 = Material_Content_Class(order=3, text="Knee", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/body-parts/knee.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/body-parts/knee.wav", materials=materials5)
-material_content22 = Material_Content_Class(order=4, text="Foot", image="https://storage.cloud.google.com/tardigrade-bucket/lesson-img/body-parts/foot.jpg", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/body-parts/foot.wav", materials=materials5)
+material_content19 = Material_Content_Class(order=1, text="Head", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/body-parts/head.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/body-parts/head.wav", materials=materials5)
+material_content20 = Material_Content_Class(order=2, text="Hand", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/body-parts/hand.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/body-parts/hand.wav", materials=materials5)
+material_content21 = Material_Content_Class(order=3, text="Knee", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/body-parts/knee.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/body-parts/knee.wav", materials=materials5)
+material_content22 = Material_Content_Class(order=4, text="Foot", image="https://storage.googleapis.com/tardigrade-bucket/lesson-img/body-parts/foot.jpg", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/body-parts/foot.wav", materials=materials5)
 
 db.session.add_all([material_content1, material_content2, material_content3, material_content4, material_content5, material_content6, material_content7, material_content8, material_content9, material_content10])
 db.session.add_all([material_content11, material_content12, material_content13, material_content14, material_content15, material_content16, material_content17, material_content18, material_content19, material_content20])
@@ -391,10 +391,10 @@ multiple_choices_answer2 = Multiple_Choices_Answers_Class(choice="B", text="boat
 multiple_choices_answer3 = Multiple_Choices_Answers_Class(choice="C", text="apple", multiple_choices=multiple_choices1)
 multiple_choices_answer4 = Multiple_Choices_Answers_Class(choice="D", text="elephant", multiple_choices=multiple_choices1)
 
-multiple_choices_answer5 = Multiple_Choices_Answers_Class(choice="A", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/animals/frog.wav", multiple_choices=multiple_choices2)
-multiple_choices_answer6 = Multiple_Choices_Answers_Class(choice="B", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/animals/elephant.wav", multiple_choices=multiple_choices2)
-multiple_choices_answer7 = Multiple_Choices_Answers_Class(choice="C", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/animals/rabbit.wav", multiple_choices=multiple_choices2)
-multiple_choices_answer8 = Multiple_Choices_Answers_Class(choice="D", audio="https://storage.cloud.google.com/tardigrade-bucket/lesson-audio/animals/ant.wav", multiple_choices=multiple_choices2)
+multiple_choices_answer5 = Multiple_Choices_Answers_Class(choice="A", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/animals/frog.wav", multiple_choices=multiple_choices2)
+multiple_choices_answer6 = Multiple_Choices_Answers_Class(choice="B", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/animals/elephant.wav", multiple_choices=multiple_choices2)
+multiple_choices_answer7 = Multiple_Choices_Answers_Class(choice="C", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/animals/rabbit.wav", multiple_choices=multiple_choices2)
+multiple_choices_answer8 = Multiple_Choices_Answers_Class(choice="D", audio="https://storage.googleapis.com/tardigrade-bucket/lesson-audio/animals/ant.wav", multiple_choices=multiple_choices2)
 
 multiple_choices_answer9 = Multiple_Choices_Answers_Class(choice="A", text="mother", multiple_choices=multiple_choices3)
 multiple_choices_answer10 = Multiple_Choices_Answers_Class(choice="B", text="sister", multiple_choices=multiple_choices3)
