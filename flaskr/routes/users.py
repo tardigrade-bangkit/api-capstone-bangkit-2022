@@ -249,15 +249,15 @@ def get_one_children(current_user, children_id, id):
 
 @app.route('/children/<int:children_id>', methods=['PUT'])
 @token_required
-def update_one_children(current_user, children_id, id):
+def update_one_children(current_user, children_id):
     selected_children = Children.query.filter_by(
-        id=children_id, Users_id=id).first()
+        id=children_id, Users_id=current_user.id).first()
     if not selected_children:
         return jsonify({"msg": "Children not found"}), 401
 
     data = request.get_json()
 
-    selected_children.name = data["name"]
+    selected_children.level = data["level"]
 
     db.session.commit()
 
