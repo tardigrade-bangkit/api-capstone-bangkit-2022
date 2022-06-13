@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import random, string
 from functools import wraps
 import base64
 import logging
@@ -11,8 +12,6 @@ from flaskr.__init__ import app, secret
 from flask import jsonify, request
 from flask_bcrypt import check_password_hash
 # from flaskr.model import main
-# import h5py
-
 
 def token_required(f):
     @wraps(f)
@@ -844,6 +843,7 @@ def answer(current_user):
     correct_answer = 0
 
     for answer in data["list_answer"]:
+        
         selected_questions = Questions_Class.query.filter_by(
             id=answer["question_id"]).first()
 
@@ -868,9 +868,19 @@ def answer(current_user):
             selected_answer = Short_answers.query.filter_by(id=get_id).first()
 
             if selected_answer.type == "audio":
-                pass
+                img_base64 = base64.decode(answer["answer"])
+                string_list = string.ascii_lowercase
+                result_name = ''.join(random.choice(string_list) for i in range(10))
+                image_result = open(result_name, 'wb')
+                image_result.write(img_base64)
+                
             elif selected_answer.type == "image":
-                pass
+                img_base64 = base64.decode(answer["answer"])
+                string_list = string.ascii_lowercase
+                result_name = ''.join(random.choice(string_list) for i in range(10))
+                image_result = open(result_name, 'wb')
+                image_result.write(img_base64)
+                
             elif selected_answer.type == "text":
                 if (answer["answer"] == selected_answer.answer):
                     correct_answer += 1
